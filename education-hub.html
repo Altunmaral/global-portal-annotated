@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Learn</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/comments.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Education Hub styles */
+        .learn-hero {
+            background: linear-gradient(135deg, var(--eq-navy) 0%, var(--eq-navy-light) 60%, var(--eq-teal-dark) 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-10) var(--space-8);
+            color: var(--eq-white);
+            margin-bottom: var(--space-8);
+            display: flex;
+            gap: var(--space-8);
+            align-items: center;
+        }
+        .learn-hero__content {
+            flex: 1;
+        }
+        .learn-hero__title {
+            font-size: var(--fs-2xl);
+            font-weight: var(--fw-bold);
+            margin-bottom: var(--space-2);
+        }
+        .learn-hero__desc {
+            font-size: var(--fs-base);
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+            line-height: var(--lh-relaxed);
+        }
+        .learn-hero__featured {
+            flex: 0 0 360px;
+            position: relative;
+        }
+
+        /* Video card */
+        .video-card {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .video-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+        .video-card__thumb {
+            position: relative;
+            background: var(--eq-navy);
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .video-card__thumb--maturity { background: linear-gradient(135deg, #1B2A4A 0%, #00A5B5 100%); }
+        .video-card__thumb--tax { background: linear-gradient(135deg, #2D4470 0%, #A8D400 100%); }
+        .video-card__thumb--isa { background: linear-gradient(135deg, #0F1A30 0%, #33C4D1 100%); }
+        .video-card__thumb--vesting { background: linear-gradient(135deg, #1B2A4A 0%, #F5A623 100%); }
+        .video-card__thumb--leaving { background: linear-gradient(135deg, #343A40 0%, #E85D75 100%); }
+        .video-card__thumb--dividends { background: linear-gradient(135deg, #1B2A4A 0%, #C5E84B 100%); }
+        .video-card__thumb--basics { background: linear-gradient(135deg, #2D4470 0%, #00A5B5 100%); }
+        .video-card__thumb--login { background: linear-gradient(135deg, #0F1A30 0%, #007A87 100%); }
+
+        .video-card__play {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--eq-white);
+            transition: all var(--transition-fast);
+        }
+        .video-card:hover .video-card__play {
+            background: rgba(255,255,255,0.35);
+            transform: scale(1.1);
+        }
+        .video-card__duration {
+            position: absolute;
+            bottom: var(--space-2);
+            right: var(--space-2);
+            background: rgba(0,0,0,0.7);
+            color: var(--eq-white);
+            font-size: 11px;
+            font-weight: var(--fw-bold);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+        }
+        .video-card__body {
+            padding: var(--space-4);
+        }
+        .video-card__title {
+            font-size: var(--fs-base);
+            font-weight: var(--fw-semibold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-1);
+        }
+        .video-card__meta {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+        }
+
+        /* Featured video (large) */
+        .featured-video {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        .featured-video__thumb {
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1)),
+                        linear-gradient(135deg, #1B2A4A 0%, #00A5B5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-lg);
+        }
+        .featured-video__play {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--eq-white);
+            transition: all var(--transition-fast);
+        }
+        .featured-video:hover .featured-video__play {
+            background: rgba(255,255,255,0.35);
+            transform: scale(1.1);
+        }
+        .featured-video__info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-5);
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        .featured-video__title {
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+            color: var(--eq-white);
+        }
+        .featured-video__meta {
+            font-size: var(--fs-sm);
+            color: rgba(255,255,255,0.7);
+            margin-top: var(--space-1);
+        }
+
+        /* Category tabs */
+        .category-tabs {
+            display: flex;
+            gap: var(--space-1);
+            margin-bottom: var(--space-6);
+            border-bottom: 2px solid var(--eq-gray-200);
+            padding-bottom: 0;
+        }
+        .category-tab {
+            padding: var(--space-3) var(--space-5);
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-medium);
+            color: var(--eq-gray-500);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+        .category-tab:hover {
+            color: var(--eq-navy);
+        }
+        .category-tab.active {
+            color: var(--eq-teal-dark);
+            border-bottom-color: var(--eq-teal);
+            font-weight: var(--fw-semibold);
+        }
+
+        /* Video grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-5);
+        }
+
+        /* Search bar */
+        .learn-search {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-bottom: var(--space-6);
+        }
+        .learn-search .eq-input {
+            max-width: 400px;
+        }
+
+        /* Glossary */
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-4);
+        }
+        .glossary-card {
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            transition: border-color var(--transition-fast);
+        }
+        .glossary-card:hover {
+            border-color: var(--eq-teal);
+        }
+        .glossary-card__term {
+            font-size: var(--fs-md);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-2);
+        }
+        .glossary-card__def {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+            line-height: var(--lh-relaxed);
+            margin-bottom: var(--space-3);
+        }
+        .glossary-card__links {
+            display: flex;
+            gap: var(--space-4);
+            font-size: var(--fs-sm);
+        }
+
+        /* Alphabet nav */
+        .alpha-nav {
+            display: flex;
+            gap: var(--space-1);
+            margin-bottom: var(--space-5);
+            flex-wrap: wrap;
+        }
+        .alpha-nav__letter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-semibold);
+            color: var(--eq-gray-500);
+            background: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .alpha-nav__letter:hover {
+            background: var(--eq-gray-100);
+        }
+        .alpha-nav__letter.active {
+            background: var(--eq-teal);
+            color: var(--eq-white);
+        }
+        .alpha-nav__letter.disabled {
+            color: var(--eq-gray-300);
+            cursor: default;
+        }
+
+        @media (max-width: 1024px) {
+            .video-grid { grid-template-columns: repeat(2, 1fr); }
+            .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+            .learn-hero { flex-direction: column; }
+            .learn-hero__featured { flex: none; width: 100%; }
+        }
+        @media (max-width: 768px) {
+            .video-grid { grid-template-columns: 1fr; }
+            .glossary-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="eq-app">
+        <!-- Sidebar -->
+        <aside class="eq-sidebar">
+            <div class="eq-sidebar__logo">
+                <h2>EQ</h2>
+                <span>Global Portal</span>
+            </div>
+            <nav class="eq-sidebar__nav">
+                <div class="eq-sidebar__section-label">Main</div>
+                <a href="dashboard.html" class="eq-nav-item"><span class="eq-nav-item__icon">📊</span> Dashboard</a>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">📁</span> My Plans</a>
+                <a href="maturity-wizard.html" class="eq-nav-item"><span class="eq-nav-item__icon">🧭</span> Maturity Wizard</a>
+                <a href="transaction-tracker.html" class="eq-nav-item"><span class="eq-nav-item__icon">📦</span> Transactions</a>
+                <div class="eq-sidebar__section-label">Resources</div>
+                <a href="education-hub.html" class="eq-nav-item active"><span class="eq-nav-item__icon">🎓</span> Learn</a>
+                <a href="document-repository.html" class="eq-nav-item"><span class="eq-nav-item__icon">📄</span> Documents</a>
+                <div class="eq-sidebar__section-label">Account</div>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">⚙️</span> Settings</a>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">❓</span> Help & Support</a>
+            </nav>
+        </aside>
+
+        <main class="eq-main">
+            <header class="eq-header">
+                <div class="eq-header__left">
+                    <div class="eq-header__breadcrumb">
+                        <a href="dashboard.html">Dashboard</a> / <span>Learn</span>
+                    </div>
+                </div>
+                <div class="eq-header__right">
+                    <button class="eq-header__notification" aria-label="Notifications">🔔<span class="eq-header__notification-dot"></span></button>
+                    <div class="eq-header__user">
+                        <div>
+                            <div class="eq-header__username">John Davies</div>
+                            <div class="eq-header__role">Lloyds Banking Group</div>
+                        </div>
+                        <div class="eq-header__avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="eq-content">
+                <!-- Hero with featured video -->
+                <div class="learn-hero">
+                    <div class="learn-hero__content">
+                        <h1 class="learn-hero__title">Learn About Your Shares</h1>
+                        <p class="learn-hero__desc">
+                            Short, simple videos and guides to help you understand your share plans, make confident decisions, and get the most from your benefits.
+                        </p>
+                        <div class="eq-flex eq-flex--gap-4 eq-mt-6">
+                            <input type="text" class="eq-input" placeholder="Search topics, e.g. 'CGT', 'maturity', 'ISA'..." style="max-width:360px; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #fff;">
+                        </div>
+                    </div>
+                    <div class="learn-hero__featured">
+                        <div class="featured-video">
+                            <div class="featured-video__thumb">
+                                <div class="featured-video__play">▶</div>
+                            </div>
+                            <div class="featured-video__info">
+                                <div class="featured-video__title">What happens at maturity?</div>
+                                <div class="featured-video__meta">2:15 · Most watched this month</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="category-tabs">
+                    <button class="category-tab active">All Videos</button>
+                    <button class="category-tab">Maturity</button>
+                    <button class="category-tab">Tax & CGT</button>
+                    <button class="category-tab">ISA</button>
+                    <button class="category-tab">Getting Started</button>
+                    <button class="category-tab">Leaving</button>
+                    <button class="category-tab">Dividends</button>
+                </div>
+
+                <!-- Video Grid -->
+                <h2 class="eq-page-title" style="font-size: var(--fs-lg);">Popular Videos</h2>
+                <p class="eq-page-subtitle">2–3 minute explainers on the topics that matter most</p>
+
+                <div class="video-grid eq-mb-8">
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--tax">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">1:48</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">CGT Explained Simply</div>
+                            <div class="video-card__meta">Tax & CGT · 12.4K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--isa">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">2:30</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">ISA Benefits for You</div>
+                            <div class="video-card__meta">ISA · 9.8K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--vesting">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">1:55</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">What is Vesting?</div>
+                            <div class="video-card__meta">Getting Started · 8.2K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--leaving">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">2:05</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">What If I Leave My Job?</div>
+                            <div class="video-card__meta">Leaving · 7.1K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--dividends">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">1:32</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">Dividends Explained</div>
+                            <div class="video-card__meta">Dividends · 6.5K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--basics">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">2:45</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">Share Plan Basics</div>
+                            <div class="video-card__meta">Getting Started · 15.3K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--login">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">1:20</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">Your First Login</div>
+                            <div class="video-card__meta">Getting Started · 11.2K views</div>
+                        </div>
+                    </div>
+
+                    <div class="video-card">
+                        <div class="video-card__thumb video-card__thumb--maturity">
+                            <div class="video-card__play">▶</div>
+                            <span class="video-card__duration">2:10</span>
+                        </div>
+                        <div class="video-card__body">
+                            <div class="video-card__title">Maturity Options Compared</div>
+                            <div class="video-card__meta">Maturity · 10.1K views</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Glossary -->
+                <hr class="eq-divider">
+                <h2 class="eq-page-title eq-mt-6" style="font-size: var(--fs-lg);">Interactive Glossary</h2>
+                <p class="eq-page-subtitle">Plain English definitions for share plan terminology</p>
+
+                <!-- Alphabet nav -->
+                <div class="alpha-nav">
+                    <button class="alpha-nav__letter disabled">A</button>
+                    <button class="alpha-nav__letter">B</button>
+                    <button class="alpha-nav__letter active">C</button>
+                    <button class="alpha-nav__letter">D</button>
+                    <button class="alpha-nav__letter">E</button>
+                    <button class="alpha-nav__letter disabled">F</button>
+                    <button class="alpha-nav__letter disabled">G</button>
+                    <button class="alpha-nav__letter disabled">H</button>
+                    <button class="alpha-nav__letter">I</button>
+                    <button class="alpha-nav__letter disabled">J</button>
+                    <button class="alpha-nav__letter disabled">K</button>
+                    <button class="alpha-nav__letter disabled">L</button>
+                    <button class="alpha-nav__letter">M</button>
+                    <button class="alpha-nav__letter disabled">N</button>
+                    <button class="alpha-nav__letter">O</button>
+                    <button class="alpha-nav__letter">P</button>
+                    <button class="alpha-nav__letter disabled">Q</button>
+                    <button class="alpha-nav__letter disabled">R</button>
+                    <button class="alpha-nav__letter">S</button>
+                    <button class="alpha-nav__letter disabled">T</button>
+                    <button class="alpha-nav__letter disabled">U</button>
+                    <button class="alpha-nav__letter">V</button>
+                    <button class="alpha-nav__letter disabled">W</button>
+                    <button class="alpha-nav__letter disabled">X</button>
+                    <button class="alpha-nav__letter disabled">Y</button>
+                    <button class="alpha-nav__letter disabled">Z</button>
+                </div>
+
+                <div class="glossary-grid">
+                    <div class="glossary-card">
+                        <div class="glossary-card__term">CGT (Capital Gains Tax)</div>
+                        <div class="glossary-card__def">
+                            Tax you pay on the profit when you sell shares. You get a £3,000 allowance each tax year — you only pay tax on gains above this amount.
+                        </div>
+                        <div class="glossary-card__links">
+                            <a href="#" class="eq-text-teal">📹 Watch video</a>
+                            <a href="#" class="eq-text-teal">📖 Read more</a>
+                        </div>
+                    </div>
+
+                    <div class="glossary-card">
+                        <div class="glossary-card__term">Contract Note</div>
+                        <div class="glossary-card__def">
+                            The official document confirming a share sale or purchase. It shows the number of shares, price, fees, and net amount. Needed for your tax return.
+                        </div>
+                        <div class="glossary-card__links">
+                            <a href="#" class="eq-text-teal">📖 Read more</a>
+                        </div>
+                    </div>
+
+                    <div class="glossary-card">
+                        <div class="glossary-card__term">CSN (Certificate Shares)</div>
+                        <div class="glossary-card__def">
+                            Shares held in your name as a paper certificate. You can sell, transfer, or hold these. They appear separately from nominee-held shares.
+                        </div>
+                        <div class="glossary-card__links">
+                            <a href="#" class="eq-text-teal">📖 Read more</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/comments.js"></script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Annotated Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0F1A30;
+            color: #fff;
+            min-height: 100vh;
+        }
+        .hero {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 32px 40px;
+            text-align: center;
+        }
+        .hero__badge {
+            display: inline-block;
+            background: rgba(0,165,181,0.15);
+            color: #33C4D1;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #33C4D1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.6);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.6;
+        }
+
+        .cards {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 32px 80px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .card:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(0,165,181,0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .card__icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        .card__tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        .card__tag--t1 { background: rgba(0,165,181,0.2); color: #33C4D1; }
+        .card__tag--t2 { background: rgba(168,212,0,0.2); color: #C5E84B; }
+        .card__tag--t3 { background: rgba(245,166,35,0.2); color: #F5A623; }
+        .card__tag--sys { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+        .card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .card p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+        .card__full {
+            grid-column: 1 / -1;
+        }
+
+        .section-label {
+            grid-column: 1 / -1;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.3);
+            padding-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 32px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.3);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 32px; }
+            .cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero__badge">Annotated Prototype · Edge UX Team · February 2026</div>
+        <h1>EQ Global Portal</h1>
+        <p>Feature prototypes with <strong style="color:#E85D75;">research comment bubbles</strong>. Click the numbered pink pins on each page to see the research insights, participant quotes, and session data that informed every design decision.</p>
+    </div>
+
+    <div class="cards">
+        <div class="section-label">Tier 1 — MVP Features</div>
+
+        <a href="dashboard.html" class="card">
+            <div class="card__icon">📊</div>
+            <div class="card__tag card__tag--t1">Tier 1</div>
+            <h3>Unified Portfolio Dashboard</h3>
+            <p>Single view of all holdings, total portfolio value with tax-free/taxable split, outstanding actions, and upcoming dates.</p>
+        </a>
+
+        <a href="maturity-wizard.html" class="card">
+            <div class="card__icon">🧭</div>
+            <div class="card__tag card__tag--t1">Tier 1</div>
+            <h3>Maturity Decision Wizard</h3>
+            <p>Step-by-step decision flow with real-time CGT calculator, scenario comparison, and "I need £X" reverse calculator.</p>
+        </a>
+
+        <a href="transaction-tracker.html" class="card">
+            <div class="card__icon">📦</div>
+            <div class="card__tag card__tag--t1">Tier 1</div>
+            <h3>Transaction Timeline Tracker</h3>
+            <p>Parcel-tracking style progress visualization with expected dates, push notifications, and full audit trail.</p>
+        </a>
+
+        <a href="education-hub.html" class="card">
+            <div class="card__icon">🎓</div>
+            <div class="card__tag card__tag--t1">Tier 1</div>
+            <h3>Video Education Hub</h3>
+            <p>2–3 minute explainer videos, interactive glossary, contextual learning links, and topic-based browsing.</p>
+        </a>
+
+        <div class="section-label">Tier 2 — High Value Features</div>
+
+        <a href="document-repository.html" class="card">
+            <div class="card__icon">📄</div>
+            <div class="card__tag card__tag--t2">Tier 2</div>
+            <h3>Personal Document Repository</h3>
+            <p>All documents organized by plan and tax year. HMRC-ready tax packs, search, filter, and bulk download.</p>
+        </a>
+
+        <a href="onboarding.html" class="card">
+            <div class="card__icon">🚀</div>
+            <div class="card__tag card__tag--t3">Tier 3</div>
+            <h3>First-Time User Onboarding</h3>
+            <p>Guided 5-step setup wizard with dashboard tour, profile completion checklist, and gamified rewards.</p>
+        </a>
+
+        <div class="section-label">Design System</div>
+
+        <a href="wireframes.html" class="card card__full">
+            <div class="card__icon">✏️</div>
+            <div class="card__tag card__tag--sys">Wireframes</div>
+            <h3>Low-Fidelity Wireframes</h3>
+            <p>All features in wireframe form — useful for quick reference and stakeholder alignment before moving to high-fidelity design.</p>
+        </a>
+    </div>
+
+    <div class="footer">
+        EQ Global Portal · Annotated Prototype · Edge UX Research Team · <span style="color:#E85D75;">●</span> Pink pins = research insights
+    </div>
+</body>
+</html>

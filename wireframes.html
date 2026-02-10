@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Wireframes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #333; }
+
+        /* Wireframe styling */
+        .wireframe-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .wireframe-header { text-align: center; margin-bottom: 60px; }
+        .wireframe-header h1 { font-size: 32px; color: #1a1a2e; margin-bottom: 8px; }
+        .wireframe-header p { color: #666; font-size: 16px; }
+
+        .feature-wireframe { background: #fff; border: 2px dashed #ccc; border-radius: 12px; padding: 40px; margin-bottom: 60px; }
+        .feature-wireframe h2 { font-size: 20px; color: #1a1a2e; border-bottom: 2px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 24px; }
+        .feature-wireframe .tag { display: inline-block; background: #e8f0fe; color: #1a73e8; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; margin-bottom: 16px; }
+
+        /* Wireframe placeholder boxes */
+        .wf-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+        .wf-box { background: #f0f0f0; border: 1.5px dashed #bbb; border-radius: 8px; padding: 20px; display: flex; align-items: center; justify-content: center; text-align: center; color: #888; font-size: 13px; min-height: 60px; }
+        .wf-box.full { flex: 1 1 100%; }
+        .wf-box.half { flex: 1 1 calc(50% - 8px); }
+        .wf-box.third { flex: 1 1 calc(33.33% - 11px); }
+        .wf-box.quarter { flex: 1 1 calc(25% - 12px); }
+        .wf-box.tall { min-height: 180px; }
+        .wf-box.medium { min-height: 120px; }
+        .wf-box.short { min-height: 40px; }
+        .wf-box.nav { background: #1a1a2e; color: #fff; border: none; }
+        .wf-box.accent { background: #e8f0fe; border-color: #90b4f0; color: #4a7dd4; }
+        .wf-box.cta { background: #4a7dd4; color: #fff; border: none; border-radius: 6px; min-height: 44px; font-weight: 600; }
+        .wf-box.highlight { background: #fff3cd; border-color: #ffc107; color: #856404; }
+        .wf-box.success { background: #d4edda; border-color: #28a745; color: #155724; }
+        .wf-box.danger { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+
+        .wf-sidebar { width: 240px; flex-shrink: 0; }
+        .wf-main { flex: 1; }
+        .wf-label { font-size: 11px; color: #999; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .wf-divider { border: none; border-top: 1px dashed #ddd; margin: 20px 0; }
+
+        .wf-step-indicator { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+        .wf-step { width: 32px; height: 32px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #888; }
+        .wf-step.active { background: #4a7dd4; color: #fff; }
+        .wf-step.done { background: #28a745; color: #fff; }
+        .wf-step-line { flex: 1; height: 2px; background: #e0e0e0; }
+        .wf-step-line.done { background: #28a745; }
+
+        .wf-timeline-step { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 0; }
+        .wf-timeline-dot { width: 20px; height: 20px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; margin-top: 2px; }
+        .wf-timeline-dot.done { background: #28a745; }
+        .wf-timeline-dot.active { background: #4a7dd4; }
+        .wf-timeline-line { width: 2px; height: 40px; background: #e0e0e0; margin-left: 9px; }
+        .wf-timeline-line.done { background: #28a745; }
+        .wf-timeline-content { flex: 1; padding-bottom: 16px; }
+
+        .annotation { font-size: 11px; color: #e74c3c; font-style: italic; margin-top: 8px; }
+        .note { background: #fffde7; border-left: 3px solid #ffc107; padding: 10px 14px; font-size: 12px; color: #666; margin-top: 16px; border-radius: 0 6px 6px 0; }
+
+        @media (max-width: 768px) {
+            .wf-box.half, .wf-box.third, .wf-box.quarter { flex: 1 1 100%; }
+            .wf-sidebar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wireframe-container">
+        <div class="wireframe-header">
+            <h1>EQ Global Portal — Wireframes</h1>
+            <p>Low-fidelity wireframes for Tier 1 & Tier 2 MVP features</p>
+            <p style="color:#999; font-size:13px; margin-top:4px;">Edge UX Team · February 2026</p>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 1. UNIFIED PORTFOLIO DASHBOARD -->
+        <!-- ============================================ -->
+        <div class="feature-wireframe">
+            <span class="tag">TIER 1 · MVP</span>
+            <h2>1. Unified Portfolio Dashboard</h2>
+
+            <!-- Nav -->
+            <div class="wf-row">
+                <div class="wf-box nav full short" style="justify-content: space-between; padding: 10px 20px;">
+                    <span>☰ &nbsp; EQ Logo</span>
+                    <span>Dashboard &nbsp; Plans &nbsp; Documents &nbsp; Learn</span>
+                    <span>🔔 &nbsp; 👤 John D.</span>
+                </div>
+            </div>
+
+            <!-- Welcome banner -->
+            <div class="wf-row">
+                <div class="wf-box accent full" style="justify-content: flex-start; text-align: left; padding: 20px 24px;">
+                    <div>
+                        <div style="font-weight:600; font-size:15px; color:#1a1a2e;">Good morning, John</div>
+                        <div style="font-size:12px; margin-top:4px;">You have 2 actions requiring attention</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total value + pie chart -->
+            <div class="wf-row">
+                <div class="wf-box half tall" style="flex-direction:column;">
+                    <div class="wf-label">Total Portfolio Value</div>
+                    <div style="font-size:28px; font-weight:700; color:#1a1a2e; margin:8px 0;">£47,832.50</div>
+                    <div style="font-size:12px; color:#28a745;">↑ £1,245.30 (2.6%) this month</div>
+                    <div style="margin-top:12px; font-size:11px;">
+                        ● Tax-free: £18,200 &nbsp; ● Taxable: £29,632
+                    </div>
+                    <p class="annotation">→ Pie chart: tax-free vs taxable split</p>
+                </div>
+                <div class="wf-box half tall" style="flex-direction:column;">
+                    <div class="wf-label">Outstanding Actions</div>
+                    <div style="text-align:left; width:100%; margin-top:8px;">
+                        <div class="wf-box highlight short" style="margin-bottom:8px; font-size:12px; justify-content:flex-start; padding:10px 14px;">
+                            ⚠️ &nbsp; SAYE Plan matures in 14 days — Set preferences →
+                        </div>
+                        <div class="wf-box short" style="margin-bottom:8px; font-size:12px; justify-content:flex-start; padding:10px 14px;">
+                            📋 &nbsp; Accept your 2026 RSU Award →
+                        </div>
+                        <div class="wf-box short" style="font-size:12px; justify-content:flex-start; padding:10px 14px;">
+                            🏦 &nbsp; Add bank details for dividend payments →
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan cards -->
+            <div class="wf-label" style="margin: 8px 0 12px;">Your Plans</div>
+            <div class="wf-row">
+                <div class="wf-box third medium" style="flex-direction:column;">
+                    <div style="font-weight:600; font-size:13px;">SAYE 2023</div>
+                    <div style="font-size:22px; font-weight:700; margin:6px 0;">£12,400</div>
+                    <div style="font-size:11px;">Matures: Mar 2026</div>
+                    <div style="font-size:11px; color:#e74c3c; margin-top:4px;">● Action needed</div>
+                </div>
+                <div class="wf-box third medium" style="flex-direction:column;">
+                    <div style="font-weight:600; font-size:13px;">SIP Partnership</div>
+                    <div style="font-size:22px; font-weight:700; margin:6px 0;">£8,200</div>
+                    <div style="font-size:11px;">Monthly contribution: £150</div>
+                    <div style="font-size:11px; color:#28a745; margin-top:4px;">● Active</div>
+                </div>
+                <div class="wf-box third medium" style="flex-direction:column;">
+                    <div style="font-weight:600; font-size:13px;">RSU Award 2024</div>
+                    <div style="font-size:22px; font-weight:700; margin:6px 0;">£27,232</div>
+                    <div style="font-size:11px;">Next vest: Jun 2026</div>
+                    <div style="font-size:11px; color:#28a745; margin-top:4px;">● Active</div>
+                </div>
+            </div>
+
+            <!-- Upcoming dates -->
+            <div class="wf-row">
+                <div class="wf-box full" style="flex-direction:column; text-align:left; padding:20px 24px;">
+                    <div class="wf-label">Upcoming Dates</div>
+                    <div style="display:flex; gap:24px; margin-top:10px; font-size:12px; flex-wrap:wrap;">
+                        <div>📅 <strong>15 Mar</strong> — SAYE Maturity window opens</div>
+                        <div>📅 <strong>1 Apr</strong> — New tax year / CGT reset</div>
+                        <div>📅 <strong>15 Jun</strong> — RSU vest date (Tranche 2)</div>
+                        <div>📅 <strong>1 Sep</strong> — SIP enrollment window</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Design notes:</strong> Single global identifier displayed top-right. One login gives access to all plans (SIP, SAYE, discretionary, ISA, CSN, Global Nominee). Pie chart shows tax-free vs taxable portions. Outstanding actions are prominent and actionable.
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 2. MATURITY DECISION WIZARD -->
+        <!-- ============================================ -->
+        <div class="feature-wireframe">
+            <span class="tag">TIER 1 · MVP</span>
+            <h2>2. Maturity Decision Wizard with Tax Calculator</h2>
+
+            <!-- Step indicator -->
+            <div class="wf-step-indicator">
+                <div class="wf-step done">✓</div>
+                <div class="wf-step-line done"></div>
+                <div class="wf-step done">✓</div>
+                <div class="wf-step-line done"></div>
+                <div class="wf-step active">3</div>
+                <div class="wf-step-line"></div>
+                <div class="wf-step">4</div>
+                <div class="wf-step-line"></div>
+                <div class="wf-step">5</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#888; margin-bottom:24px;">
+                <span>Your Plan</span>
+                <span>Your Options</span>
+                <span style="color:#4a7dd4; font-weight:600;">Compare</span>
+                <span>Confirm</span>
+                <span>Done</span>
+            </div>
+
+            <!-- Main wizard area -->
+            <div class="wf-row" style="align-items:flex-start;">
+                <div class="wf-main">
+                    <div class="wf-label">Step 3: Compare Your Options</div>
+                    <p style="font-size:13px; color:#666; margin:8px 0 20px;">See exactly what you'd receive after tax for each option.</p>
+
+                    <!-- Scenario cards -->
+                    <div class="wf-row">
+                        <div class="wf-box half tall" style="flex-direction:column; border-color:#4a7dd4; background:#f8faff;">
+                            <div style="font-size:11px; color:#4a7dd4; font-weight:600;">OPTION A</div>
+                            <div style="font-weight:600; margin:4px 0;">Sell All Shares</div>
+                            <div style="font-size:24px; font-weight:700; color:#1a1a2e; margin:8px 0;">£11,847</div>
+                            <div style="font-size:11px; color:#666;">
+                                Gain: £4,400<br>
+                                CGT allowance used: £3,000<br>
+                                Tax owed (20%): £280<br>
+                                <span style="color:#28a745;">Cash in 5-7 working days</span>
+                            </div>
+                            <div class="wf-box cta" style="margin-top:12px; width:100%;">Select this option</div>
+                        </div>
+                        <div class="wf-box half tall" style="flex-direction:column;">
+                            <div style="font-size:11px; color:#888; font-weight:600;">OPTION B</div>
+                            <div style="font-weight:600; margin:4px 0;">Transfer to ISA</div>
+                            <div style="font-size:24px; font-weight:700; color:#1a1a2e; margin:8px 0;">£12,127</div>
+                            <div style="font-size:11px; color:#666;">
+                                Tax-free transfer<br>
+                                No CGT on future gains<br>
+                                ISA fee: £12.50/quarter<br>
+                                <span style="color:#4a7dd4;">Shares available in 3 days</span>
+                            </div>
+                            <div class="wf-box cta" style="margin-top:12px; width:100%; background:#6c757d;">Select this option</div>
+                        </div>
+                    </div>
+                    <div class="wf-row">
+                        <div class="wf-box half medium" style="flex-direction:column;">
+                            <div style="font-size:11px; color:#888; font-weight:600;">OPTION C</div>
+                            <div style="font-weight:600; margin:4px 0;">Return My Savings</div>
+                            <div style="font-size:24px; font-weight:700; color:#1a1a2e; margin:8px 0;">£8,000</div>
+                            <div style="font-size:11px; color:#666;">
+                                Your contributions returned<br>
+                                No shares purchased<br>
+                                No tax implications<br>
+                            </div>
+                        </div>
+                        <div class="wf-box half medium" style="flex-direction:column;">
+                            <div style="font-size:11px; color:#888; font-weight:600;">OPTION D</div>
+                            <div style="font-weight:600; margin:4px 0;">Keep Shares in Certificate</div>
+                            <div style="font-size:24px; font-weight:700; color:#1a1a2e; margin:8px 0;">£12,400</div>
+                            <div style="font-size:11px; color:#666;">
+                                Hold shares (no sale)<br>
+                                Subject to market movement<br>
+                                CGT applies when you sell later<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="wf-sidebar" style="margin-left:16px;">
+                    <div class="wf-box" style="flex-direction:column; text-align:left; padding:16px; margin-bottom:12px;">
+                        <div class="wf-label">Your SAYE Summary</div>
+                        <div style="font-size:12px; margin-top:8px; line-height:1.8;">
+                            Plan: SAYE 2023<br>
+                            Savings: £8,000<br>
+                            Option price: £2.40<br>
+                            Current price: £3.72<br>
+                            Shares: 3,333<br>
+                            Gain: £4,400
+                        </div>
+                    </div>
+                    <div class="wf-box accent" style="flex-direction:column; text-align:left; padding:16px; margin-bottom:12px;">
+                        <div style="font-weight:600; font-size:12px;">💡 "I need £X" Calculator</div>
+                        <div style="font-size:12px; margin-top:6px;">
+                            Enter the amount you need:
+                        </div>
+                        <div class="wf-box short" style="margin-top:8px; width:100%;">£ [amount input]</div>
+                        <div style="font-size:11px; color:#666; margin-top:6px;">
+                            → Sell 1,420 shares to receive £5,000 after tax
+                        </div>
+                    </div>
+                    <div class="wf-box" style="flex-direction:column; text-align:left; padding:16px;">
+                        <div style="font-weight:600; font-size:12px;">ℹ️ What does this mean?</div>
+                        <div style="font-size:11px; margin-top:6px; color:#666;">
+                            Each option explained in plain English. Popup tooltips on hover for every term.
+                        </div>
+                        <div style="font-size:11px; margin-top:8px;">
+                            <a href="#" style="color:#4a7dd4;">📹 Watch: Maturity explained (2 min)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Design notes:</strong> Interactive decision tree inspired by BT's "knowledge tree." Real-time CGT calculator. "I need £X" reverse calculator in sidebar. Contextual video link. Each option shows exact after-tax amount. Popup explanations for every option. Step indicator shows progress through 5-step wizard.
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 3. TRANSACTION TIMELINE TRACKER -->
+        <!-- ============================================ -->
+        <div class="feature-wireframe">
+            <span class="tag">TIER 1 · MVP</span>
+            <h2>3. Transaction Timeline & Progress Tracker</h2>
+
+            <div class="wf-row" style="align-items:flex-start;">
+                <div class="wf-main">
+                    <div class="wf-box accent full short" style="justify-content:space-between; padding:12px 20px;">
+                        <div>
+                            <span style="font-weight:600;">Sale Order #EQ-2026-4821</span>
+                            <span style="font-size:12px; margin-left:12px;">SAYE 2023 — Sell 1,500 shares</span>
+                        </div>
+                        <span style="font-size:12px; color:#4a7dd4;">View details →</span>
+                    </div>
+
+                    <div style="padding: 20px 0 0 10px;">
+                        <!-- Timeline steps -->
+                        <div class="wf-timeline-step">
+                            <div class="wf-timeline-dot done"></div>
+                            <div class="wf-timeline-content">
+                                <div style="font-weight:600; font-size:13px;">Instruction Received</div>
+                                <div style="font-size:12px; color:#666;">Mon 10 Mar 2026, 14:32</div>
+                                <div style="font-size:11px; color:#28a745;">✓ Confirmed</div>
+                            </div>
+                        </div>
+                        <div class="wf-timeline-line done"></div>
+
+                        <div class="wf-timeline-step">
+                            <div class="wf-timeline-dot done"></div>
+                            <div class="wf-timeline-content">
+                                <div style="font-weight:600; font-size:13px;">Shares Sold</div>
+                                <div style="font-size:12px; color:#666;">Tue 11 Mar 2026, 09:15 — Price: £3.72</div>
+                                <div style="font-size:11px; color:#28a745;">✓ 1,500 shares sold at £3.72 = £5,580.00</div>
+                            </div>
+                        </div>
+                        <div class="wf-timeline-line done"></div>
+
+                        <div class="wf-timeline-step">
+                            <div class="wf-timeline-dot active"></div>
+                            <div class="wf-timeline-content">
+                                <div style="font-weight:600; font-size:13px; color:#4a7dd4;">Contract Note Generated</div>
+                                <div style="font-size:12px; color:#666;">Expected: Wed 12 Mar 2026</div>
+                                <div style="font-size:11px; color:#4a7dd4;">⏳ Processing — usually takes 1 business day</div>
+                            </div>
+                        </div>
+                        <div class="wf-timeline-line"></div>
+
+                        <div class="wf-timeline-step">
+                            <div class="wf-timeline-dot"></div>
+                            <div class="wf-timeline-content">
+                                <div style="font-weight:600; font-size:13px;">Payment Processing</div>
+                                <div style="font-size:12px; color:#666;">Expected: Thu 13 Mar 2026</div>
+                            </div>
+                        </div>
+                        <div class="wf-timeline-line"></div>
+
+                        <div class="wf-timeline-step">
+                            <div class="wf-timeline-dot"></div>
+                            <div class="wf-timeline-content">
+                                <div style="font-weight:600; font-size:13px;">Money in Your Account</div>
+                                <div style="font-size:12px; color:#666;">Expected: Fri 14 Mar 2026</div>
+                                <div style="font-size:11px; color:#888;">Bank: ●●●● 4821 (Lloyds)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification preferences -->
+                    <hr class="wf-divider">
+                    <div class="wf-label">Notification Preferences</div>
+                    <div class="wf-row" style="margin-top:8px;">
+                        <div class="wf-box third short" style="font-size:12px;">📧 Email ✓</div>
+                        <div class="wf-box third short" style="font-size:12px;">📱 Push notification ✓</div>
+                        <div class="wf-box third short" style="font-size:12px;">💬 SMS ○</div>
+                    </div>
+                </div>
+
+                <!-- Sidebar: Transaction history -->
+                <div class="wf-sidebar" style="margin-left:16px;">
+                    <div class="wf-label">Recent Transactions</div>
+                    <div class="wf-box" style="flex-direction:column; text-align:left; padding:12px; margin-top:8px; font-size:12px;">
+                        <div style="font-weight:600;">Sale #EQ-2026-4821</div>
+                        <div style="color:#4a7dd4;">In progress</div>
+                    </div>
+                    <div class="wf-box" style="flex-direction:column; text-align:left; padding:12px; margin-top:8px; font-size:12px;">
+                        <div style="font-weight:600;">Dividend Payment</div>
+                        <div style="color:#28a745;">Completed 28 Feb</div>
+                    </div>
+                    <div class="wf-box" style="flex-direction:column; text-align:left; padding:12px; margin-top:8px; font-size:12px;">
+                        <div style="font-weight:600;">ISA Transfer</div>
+                        <div style="color:#28a745;">Completed 15 Jan</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Design notes:</strong> Inspired by DPD/Amazon parcel tracking. Each step shows exact date/time. Push notifications at every stage (email, app, SMS). Full transaction audit trail. Passport renewal style proactive updates. Visual progress bar with expected dates.
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 4. VIDEO EDUCATION HUB -->
+        <!-- ============================================ -->
+        <div class="feature-wireframe">
+            <span class="tag">TIER 1 · MVP</span>
+            <h2>4. Short-Form Video Education Hub</h2>
+
+            <div class="wf-row">
+                <div class="wf-box full short" style="justify-content:space-between; padding:12px 20px;">
+                    <span style="font-weight:600;">Learn</span>
+                    <div style="font-size:12px;">
+                        <span style="color:#4a7dd4; font-weight:600; text-decoration:underline;">All</span> &nbsp;
+                        <span>Maturity</span> &nbsp;
+                        <span>Tax</span> &nbsp;
+                        <span>ISA</span> &nbsp;
+                        <span>Getting Started</span> &nbsp;
+                        <span>Glossary</span>
+                    </div>
+                    <div class="wf-box short" style="min-height:32px; width:200px; font-size:11px;">🔍 Search topics...</div>
+                </div>
+            </div>
+
+            <!-- Featured video -->
+            <div class="wf-row">
+                <div class="wf-box" style="flex:2; min-height:240px; flex-direction:column; background:#1a1a2e; color:#fff; border:none; border-radius:12px;">
+                    <div style="font-size:40px; margin-bottom:12px;">▶</div>
+                    <div style="font-weight:600; font-size:16px;">What happens at maturity?</div>
+                    <div style="font-size:12px; opacity:0.7; margin-top:4px;">2:15 · Most watched this month</div>
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+                    <div class="wf-box" style="flex:1; flex-direction:column; font-size:12px;">
+                        <div>▶</div>
+                        <div style="font-weight:600; margin-top:4px;">CGT Explained Simply</div>
+                        <div style="font-size:11px; color:#888;">1:48</div>
+                    </div>
+                    <div class="wf-box" style="flex:1; flex-direction:column; font-size:12px;">
+                        <div>▶</div>
+                        <div style="font-weight:600; margin-top:4px;">ISA Benefits for You</div>
+                        <div style="font-size:11px; color:#888;">2:30</div>
+                    </div>
+                    <div class="wf-box" style="flex:1; flex-direction:column; font-size:12px;">
+                        <div>▶</div>
+                        <div style="font-weight:600; margin-top:4px;">What is Vesting?</div>
+                        <div style="font-size:11px; color:#888;">1:55</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video grid -->
+            <div class="wf-label" style="margin:16px 0 8px;">Popular Topics</div>
+            <div class="wf-row">
+                <div class="wf-box quarter medium" style="flex-direction:column; font-size:12px;">
+                    <div style="font-size:24px;">▶</div>
+                    <div style="font-weight:600; margin-top:6px;">What if I leave?</div>
+                    <div style="font-size:11px; color:#888;">2:05 · Leaving</div>
+                </div>
+                <div class="wf-box quarter medium" style="flex-direction:column; font-size:12px;">
+                    <div style="font-size:24px;">▶</div>
+                    <div style="font-weight:600; margin-top:6px;">Dividends Explained</div>
+                    <div style="font-size:11px; color:#888;">1:32 · Income</div>
+                </div>
+                <div class="wf-box quarter medium" style="flex-direction:column; font-size:12px;">
+                    <div style="font-size:24px;">▶</div>
+                    <div style="font-weight:600; margin-top:6px;">Your First Login</div>
+                    <div style="font-size:11px; color:#888;">1:20 · Getting Started</div>
+                </div>
+                <div class="wf-box quarter medium" style="flex-direction:column; font-size:12px;">
+                    <div style="font-size:24px;">▶</div>
+                    <div style="font-weight:600; margin-top:6px;">Share Plan Basics</div>
+                    <div style="font-size:11px; color:#888;">2:45 · Getting Started</div>
+                </div>
+            </div>
+
+            <!-- Interactive glossary -->
+            <hr class="wf-divider">
+            <div class="wf-label">Interactive Glossary</div>
+            <div class="wf-row" style="margin-top:8px;">
+                <div class="wf-box" style="flex:1; flex-direction:column; text-align:left; padding:16px; font-size:12px;">
+                    <div style="font-weight:600;">CGT (Capital Gains Tax)</div>
+                    <div style="color:#666; margin-top:4px;">Tax you pay on the profit when you sell shares. You get a £3,000 allowance each tax year before you pay anything.</div>
+                    <a href="#" style="color:#4a7dd4; font-size:11px; margin-top:6px; display:block;">📹 Watch video · 📖 Read more</a>
+                </div>
+                <div class="wf-box" style="flex:1; flex-direction:column; text-align:left; padding:16px; font-size:12px;">
+                    <div style="font-weight:600;">Vesting</div>
+                    <div style="color:#666; margin-top:4px;">When your shares become officially yours. Before vesting, they're promised but not yet owned.</div>
+                    <a href="#" style="color:#4a7dd4; font-size:11px; margin-top:6px; display:block;">📹 Watch video · 📖 Read more</a>
+                </div>
+                <div class="wf-box" style="flex:1; flex-direction:column; text-align:left; padding:16px; font-size:12px;">
+                    <div style="font-weight:600;">Maturity</div>
+                    <div style="color:#666; margin-top:4px;">The date when your savings plan ends and you choose what to do — buy shares, take cash, or transfer to an ISA.</div>
+                    <a href="#" style="color:#4a7dd4; font-size:11px; margin-top:6px; display:block;">📹 Watch video · 📖 Read more</a>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Design notes:</strong> 2-3 minute max videos. TikTok/Instagram-style for younger workforce. Contextual: relevant videos appear at decision points (e.g., maturity wizard links to "What happens at maturity?" video). AI-generated where appropriate. Interactive glossary with plain English definitions.
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 5. DOCUMENT REPOSITORY -->
+        <!-- ============================================ -->
+        <div class="feature-wireframe">
+            <span class="tag">TIER 2 · HIGH VALUE</span>
+            <h2>5. Personal Document Repository</h2>
+
+            <div class="wf-row">
+                <div class="wf-box full short" style="justify-content:space-between; padding:12px 20px;">
+                    <span style="font-weight:600;">My Documents</span>
+                    <div style="font-size:12px;">
+                        <span style="color:#4a7dd4; font-weight:600;">All</span> &nbsp;
+                        <span>Tax Documents</span> &nbsp;
+                        <span>Sale Advices</span> &nbsp;
+                        <span>Contract Notes</span> &nbsp;
+                        <span>Dividends</span>
+                    </div>
+                    <div class="wf-box short" style="min-height:32px; width:200px; font-size:11px;">🔍 Search documents...</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="wf-row">
+                <div class="wf-box short" style="flex:0 0 auto; padding:8px 16px; font-size:12px;">Tax Year: <strong>2025/26 ▾</strong></div>
+                <div class="wf-box short" style="flex:0 0 auto; padding:8px 16px; font-size:12px;">Plan: <strong>All Plans ▾</strong></div>
+                <div class="wf-box short" style="flex:0 0 auto; padding:8px 16px; font-size:12px;">Type: <strong>All Types ▾</strong></div>
+                <div style="flex:1;"></div>
+                <div class="wf-box short" style="flex:0 0 auto; padding:8px 16px; font-size:12px;">⬇ Download All (Tax Year)</div>
+            </div>
+
+            <!-- Document list -->
+            <div class="wf-row">
+                <div class="wf-box full" style="flex-direction:column; text-align:left; padding:0;">
+                    <div style="display:flex; padding:12px 20px; border-bottom:1px solid #eee; font-size:12px; color:#888; font-weight:600;">
+                        <span style="flex:2;">Document</span>
+                        <span style="flex:1;">Plan</span>
+                        <span style="flex:1;">Date</span>
+                        <span style="flex:1;">Tax Year</span>
+                        <span style="flex:0 0 100px; text-align:right;">Actions</span>
+                    </div>
+                    <div style="display:flex; padding:14px 20px; border-bottom:1px solid #f0f0f0; font-size:13px; align-items:center;">
+                        <span style="flex:2;">📄 Contract Note — Sale of 1,500 shares</span>
+                        <span style="flex:1; font-size:12px; color:#666;">SAYE 2023</span>
+                        <span style="flex:1; font-size:12px; color:#666;">11 Mar 2026</span>
+                        <span style="flex:1; font-size:12px; color:#666;">2025/26</span>
+                        <span style="flex:0 0 100px; text-align:right; font-size:12px; color:#4a7dd4;">View · Download</span>
+                    </div>
+                    <div style="display:flex; padding:14px 20px; border-bottom:1px solid #f0f0f0; font-size:13px; align-items:center;">
+                        <span style="flex:2;">📄 Dividend Statement — Q4 2025</span>
+                        <span style="flex:1; font-size:12px; color:#666;">SIP</span>
+                        <span style="flex:1; font-size:12px; color:#666;">28 Feb 2026</span>
+                        <span style="flex:1; font-size:12px; color:#666;">2025/26</span>
+                        <span style="flex:0 0 100px; text-align:right; font-size:12px; color:#4a7dd4;">View · Download</span>
+                    </div>
+                    <div style="display:flex; padding:14px 20px; border-bottom:1px solid #f0f0f0; font-size:13px; align-items:center;">
+                        <span style="flex:2;">📄 Post-Vesting Statement — RSU Tranche 1</span>
+                        <span style="flex:1; font-size:12px; color:#666;">RSU 2024</span>
+                        <span style="flex:1; font-size:12px; color:#666;">15 Dec 2025</span>
+                        <span style="flex:1; font-size:12px; color:#666;">2025/26</span>
+                        <span style="flex:0 0 100px; text-align:right; font-size:12px; color:#4a7dd4;">View · Download</span>
+                    </div>
+                    <div style="display:flex; padding:14px 20px; font-size:13px; align-items:center;">
+                        <span style="flex:2;">📄 Annual Tax Summary 2024/25</span>
+                        <span style="flex:1; font-size:12px; color:#666;">All Plans</span>
+                        <span style="flex:1; font-size:12px; color:#666;">6 Apr 2025</span>
+                        <span style="flex:1; font-size:12px; color:#666;">2024/25</span>
+                        <span style="flex:0 0 100px; text-align:right; font-size:12px; color:#4a7dd4;">View · Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tax helper -->
+            <div class="wf-row">
+                <div class="wf-box accent full" style="padding:16px 24px; text-align:left;">
+                    <div>
+                        <div style="font-weight:600; font-size:13px;">🧾 Preparing your tax return?</div>
+                        <div style="font-size:12px; margin-top:4px; color:#666;">Download your complete tax pack for 2025/26 — includes all gains, dividends, and base cost information in HMRC-ready format.</div>
+                        <div class="wf-box cta" style="margin-top:10px; display:inline-flex; min-height:36px; padding:0 20px;">Download Tax Pack 2025/26</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Design notes:</strong> Organized by plan and tax year. Tax-ready format matching HMRC requirements. Search and filter. Download individual or bulk. Addresses January spike in tax queries. Eliminates need for duplicate document requests to helpline.
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 6. FIRST-TIME USER ONBOARDING -->
+        <!-- ============================================ -->
+        <div class="feature-wireframe">
+            <span class="tag">TIER 3 · ENHANCEMENT</span>
+            <h2>6. First-Time User Onboarding Wizard</h2>
+
+            <!-- Progress bar -->
+            <div class="wf-row">
+                <div class="wf-box full short" style="padding:8px 20px;">
+                    <div style="width:100%;">
+                        <div style="display:flex; justify-content:space-between; font-size:11px; color:#888; margin-bottom:6px;">
+                            <span>Setting up your portal</span>
+                            <span>Step 3 of 5</span>
+                        </div>
+                        <div style="background:#e0e0e0; height:6px; border-radius:3px; width:100%;">
+                            <div style="background:#4a7dd4; height:6px; border-radius:3px; width:60%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onboarding content -->
+            <div class="wf-row">
+                <div class="wf-box" style="flex:1; min-height:300px; flex-direction:column;">
+                    <div style="font-size:20px; font-weight:600; color:#1a1a2e; margin-bottom:8px;">Here's your portfolio at a glance</div>
+                    <div style="font-size:14px; color:#666; margin-bottom:20px;">This is your dashboard. You'll see all your share plans, their values, and any actions you need to take — all in one place.</div>
+
+                    <div class="wf-box" style="width:100%; min-height:160px; background:#f8f8f8;">
+                        [Animated highlight of dashboard features with tooltip callouts]
+                    </div>
+
+                    <div style="display:flex; gap:12px; margin-top:24px; justify-content:space-between; width:100%;">
+                        <div class="wf-box short" style="padding:8px 20px; font-size:13px; cursor:pointer;">← Back</div>
+                        <div style="display:flex; gap:6px;">
+                            <div style="width:8px; height:8px; border-radius:50%; background:#ccc;"></div>
+                            <div style="width:8px; height:8px; border-radius:50%; background:#ccc;"></div>
+                            <div style="width:8px; height:8px; border-radius:50%; background:#4a7dd4;"></div>
+                            <div style="width:8px; height:8px; border-radius:50%; background:#ccc;"></div>
+                            <div style="width:8px; height:8px; border-radius:50%; background:#ccc;"></div>
+                        </div>
+                        <div class="wf-box cta short" style="padding:8px 20px; font-size:13px;">Next →</div>
+                    </div>
+                </div>
+
+                <!-- Checklist sidebar -->
+                <div class="wf-sidebar" style="margin-left:16px;">
+                    <div class="wf-label">Setup Checklist</div>
+                    <div class="wf-box" style="flex-direction:column; text-align:left; padding:16px; margin-top:8px;">
+                        <div style="font-size:12px; line-height:2.2;">
+                            <div style="color:#28a745;">✅ Verify your identity</div>
+                            <div style="color:#28a745;">✅ Set notification preferences</div>
+                            <div style="color:#4a7dd4; font-weight:600;">🔵 Tour your dashboard</div>
+                            <div style="color:#888;">○ Add bank details</div>
+                            <div style="color:#888;">○ Set dividend mandate</div>
+                        </div>
+                    </div>
+                    <div class="wf-box short" style="margin-top:12px; font-size:12px; color:#888; cursor:pointer;">
+                        Skip setup — I'll explore on my own
+                    </div>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Design notes:</strong> 5-step guided tour for first-time users. Checklist ensures profile completion (bank details, dividend mandate, notifications). Gamified progress. Skip option available. Addresses 70% first-session drop-off rate. Includes prompted health check for dividend mandates (£25K+ in unclaimed dividends found at BT).
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

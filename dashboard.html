@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Dashboard</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/comments.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Dashboard-specific styles */
+        .dashboard-welcome {
+            background: linear-gradient(135deg, var(--eq-navy) 0%, var(--eq-navy-light) 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            color: var(--eq-white);
+            margin-bottom: var(--space-6);
+        }
+        .dashboard-welcome h1 {
+            font-size: var(--fs-2xl);
+            font-weight: var(--fw-bold);
+            margin-bottom: var(--space-2);
+        }
+        .dashboard-welcome p {
+            color: rgba(255,255,255,0.7);
+            font-size: var(--fs-base);
+        }
+
+        .portfolio-value {
+            text-align: center;
+            padding: var(--space-8) var(--space-6);
+        }
+        .portfolio-value__amount {
+            font-size: var(--fs-3xl);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            line-height: 1;
+            margin-bottom: var(--space-2);
+        }
+        .portfolio-value__change {
+            font-size: var(--fs-base);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        /* Donut chart placeholder */
+        .donut-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--eq-teal) 0deg 137deg,
+                var(--eq-navy-light) 137deg 360deg
+            );
+            margin: var(--space-4) auto;
+            position: relative;
+        }
+        .donut-chart::after {
+            content: '';
+            position: absolute;
+            inset: 40px;
+            border-radius: 50%;
+            background: var(--eq-white);
+        }
+        .donut-legend {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-6);
+            font-size: var(--fs-sm);
+            margin-top: var(--space-4);
+        }
+        .donut-legend__item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        .donut-legend__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Action items */
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--eq-gray-200);
+            margin-bottom: var(--space-3);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .action-item:hover {
+            border-color: var(--eq-teal);
+            background: rgba(0,165,181,0.03);
+        }
+        .action-item--urgent {
+            border-color: var(--eq-warning);
+            background: rgba(255,193,7,0.04);
+        }
+        .action-item__icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-lg);
+            flex-shrink: 0;
+        }
+        .action-item__icon--warning { background: var(--eq-warning-bg); }
+        .action-item__icon--info    { background: var(--eq-info-bg); }
+        .action-item__icon--teal    { background: rgba(0,165,181,0.12); }
+        .action-item__content { flex: 1; }
+        .action-item__title { font-weight: var(--fw-semibold); font-size: var(--fs-base); color: var(--eq-navy); }
+        .action-item__desc { font-size: var(--fs-sm); color: var(--eq-gray-500); margin-top: 2px; }
+        .action-item__arrow { color: var(--eq-gray-400); font-size: var(--fs-lg); }
+
+        /* Plan cards */
+        .plan-card {
+            padding: var(--space-5);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--eq-gray-200);
+            background: var(--eq-white);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+        .plan-card:hover {
+            border-color: var(--eq-teal);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .plan-card__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-4);
+        }
+        .plan-card__name {
+            font-weight: var(--fw-semibold);
+            color: var(--eq-navy);
+            font-size: var(--fs-base);
+        }
+        .plan-card__value {
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-2);
+        }
+        .plan-card__detail {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-500);
+            line-height: var(--lh-relaxed);
+        }
+        .plan-card__footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: var(--space-4);
+            padding-top: var(--space-3);
+            border-top: 1px solid var(--eq-gray-100);
+        }
+
+        /* Upcoming dates */
+        .date-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-3) 0;
+        }
+        .date-item + .date-item {
+            border-top: 1px solid var(--eq-gray-100);
+        }
+        .date-item__cal {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--eq-gray-50);
+            border: 1px solid var(--eq-gray-200);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .date-item__cal-month {
+            font-size: 9px;
+            font-weight: var(--fw-bold);
+            text-transform: uppercase;
+            color: var(--eq-teal-dark);
+            letter-spacing: 0.5px;
+        }
+        .date-item__cal-day {
+            font-size: var(--fs-md);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            line-height: 1;
+        }
+        .date-item__text {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-700);
+        }
+        .date-item__sub {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+            margin-top: 1px;
+        }
+
+        /* Global ID badge */
+        .global-id {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background: rgba(255,255,255,0.1);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--fs-xs);
+            color: rgba(255,255,255,0.8);
+            font-family: var(--font-mono);
+        }
+    </style>
+</head>
+<body>
+    <div class="eq-app">
+        <!-- Sidebar -->
+        <aside class="eq-sidebar">
+            <div class="eq-sidebar__logo">
+                <h2>EQ</h2>
+                <span>Global Portal</span>
+            </div>
+            <nav class="eq-sidebar__nav">
+                <div class="eq-sidebar__section-label">Main</div>
+                <a href="dashboard.html" class="eq-nav-item active">
+                    <span class="eq-nav-item__icon">📊</span>
+                    Dashboard
+                    <span class="eq-nav-item__badge">2</span>
+                </a>
+                <a href="#" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📁</span>
+                    My Plans
+                </a>
+                <a href="maturity-wizard.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">🧭</span>
+                    Maturity Wizard
+                </a>
+                <a href="transaction-tracker.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📦</span>
+                    Transactions
+                </a>
+
+                <div class="eq-sidebar__section-label">Resources</div>
+                <a href="education-hub.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">🎓</span>
+                    Learn
+                </a>
+                <a href="document-repository.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📄</span>
+                    Documents
+                </a>
+
+                <div class="eq-sidebar__section-label">Account</div>
+                <a href="#" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">⚙️</span>
+                    Settings
+                </a>
+                <a href="#" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">❓</span>
+                    Help & Support
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="eq-main">
+            <!-- Header -->
+            <header class="eq-header">
+                <div class="eq-header__left">
+                    <div class="eq-header__breadcrumb">
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+                <div class="eq-header__right">
+                    <button class="eq-header__notification" aria-label="Notifications">
+                        🔔
+                        <span class="eq-header__notification-dot"></span>
+                    </button>
+                    <div class="eq-header__user">
+                        <div>
+                            <div class="eq-header__username">John Davies</div>
+                            <div class="eq-header__role">Employee · Lloyds Banking Group</div>
+                        </div>
+                        <div class="eq-header__avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="eq-content">
+                <!-- Welcome Banner -->
+                <div class="dashboard-welcome">
+                    <div class="eq-flex eq-flex--between eq-flex--center">
+                        <div>
+                            <h1>Good morning, John</h1>
+                            <p>You have 2 actions that need your attention</p>
+                        </div>
+                        <div class="global-id">
+                            🔗 EQ-ID: LBG-482917
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main grid: Portfolio + Actions -->
+                <div class="eq-grid eq-grid--sidebar" style="margin-bottom: var(--space-6);">
+                    <!-- Portfolio Value Card -->
+                    <div class="eq-card eq-card--elevated">
+                        <div class="eq-card__header">
+                            <div class="eq-card__title">Total Portfolio Value</div>
+                            <span class="eq-badge eq-badge--teal">All Plans</span>
+                        </div>
+                        <div class="portfolio-value">
+                            <div class="portfolio-value__amount">£47,832.50</div>
+                            <div class="portfolio-value__change eq-text-success">
+                                ↑ £1,245.30 (+2.6%) this month
+                            </div>
+                        </div>
+                        <div class="donut-chart"></div>
+                        <div class="donut-legend">
+                            <div class="donut-legend__item">
+                                <div class="donut-legend__dot" style="background: var(--eq-teal);"></div>
+                                Tax-free · £18,200
+                            </div>
+                            <div class="donut-legend__item">
+                                <div class="donut-legend__dot" style="background: var(--eq-navy-light);"></div>
+                                Taxable · £29,632
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Outstanding Actions -->
+                    <div>
+                        <div class="eq-card" style="margin-bottom: var(--space-4);">
+                            <div class="eq-card__header">
+                                <div class="eq-card__title">Outstanding Actions</div>
+                                <span class="eq-badge eq-badge--danger">2 urgent</span>
+                            </div>
+
+                            <div class="action-item action-item--urgent">
+                                <div class="action-item__icon action-item__icon--warning">⚠️</div>
+                                <div class="action-item__content">
+                                    <div class="action-item__title">SAYE Plan matures in 14 days</div>
+                                    <div class="action-item__desc">Set your maturity preferences before 15 March</div>
+                                </div>
+                                <div class="action-item__arrow">→</div>
+                            </div>
+
+                            <div class="action-item action-item--urgent">
+                                <div class="action-item__icon action-item__icon--info">📋</div>
+                                <div class="action-item__content">
+                                    <div class="action-item__title">Accept your 2026 RSU Award</div>
+                                    <div class="action-item__desc">Deadline: 28 February 2026</div>
+                                </div>
+                                <div class="action-item__arrow">→</div>
+                            </div>
+
+                            <div class="action-item">
+                                <div class="action-item__icon action-item__icon--teal">🏦</div>
+                                <div class="action-item__content">
+                                    <div class="action-item__title">Add bank details for dividends</div>
+                                    <div class="action-item__desc">Ensure your dividends are paid to you automatically</div>
+                                </div>
+                                <div class="action-item__arrow">→</div>
+                            </div>
+                        </div>
+
+                        <!-- Profile completion -->
+                        <div class="eq-card">
+                            <div class="eq-card__header">
+                                <div class="eq-card__title">Profile Health</div>
+                                <span class="eq-text-sm eq-text-bold" style="color: var(--eq-orange);">72%</span>
+                            </div>
+                            <div class="eq-progress eq-mb-2">
+                                <div class="eq-progress__bar eq-progress__bar--warning" style="width: 72%;"></div>
+                            </div>
+                            <div class="eq-text-sm eq-text-muted">Add bank details and set dividend mandate to complete your profile</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Cards -->
+                <div class="eq-flex eq-flex--between eq-flex--center eq-mb-4">
+                    <h2 class="eq-page-title" style="margin-bottom:0;">Your Plans</h2>
+                    <a href="#" class="eq-btn eq-btn--ghost eq-btn--sm">View all plans →</a>
+                </div>
+                <div class="eq-grid eq-grid--3" style="margin-bottom: var(--space-6);">
+                    <!-- Plan Card: SAYE -->
+                    <div class="plan-card">
+                        <div class="plan-card__header">
+                            <div class="plan-card__name">SAYE 2023</div>
+                            <span class="eq-badge eq-badge--warning">Maturing</span>
+                        </div>
+                        <div class="plan-card__value">£12,400</div>
+                        <div class="plan-card__detail">
+                            Option price: £2.40<br>
+                            Current price: £3.72<br>
+                            Potential gain: <span class="eq-text-success eq-text-bold">£4,400</span>
+                        </div>
+                        <div class="plan-card__footer">
+                            <span class="eq-text-xs eq-text-muted">Matures: 15 Mar 2026</span>
+                            <a href="maturity-wizard.html" class="eq-btn eq-btn--primary eq-btn--sm">Decide now →</a>
+                        </div>
+                    </div>
+
+                    <!-- Plan Card: SIP -->
+                    <div class="plan-card">
+                        <div class="plan-card__header">
+                            <div class="plan-card__name">SIP Partnership</div>
+                            <span class="eq-badge eq-badge--success">Active</span>
+                        </div>
+                        <div class="plan-card__value">£8,200</div>
+                        <div class="plan-card__detail">
+                            Monthly contribution: £150<br>
+                            Matching shares: 1:1<br>
+                            Shares held: 2,140
+                        </div>
+                        <div class="plan-card__footer">
+                            <span class="eq-text-xs eq-text-muted">Tax-free from: Aug 2028</span>
+                            <a href="#" class="eq-btn eq-btn--ghost eq-btn--sm">View details</a>
+                        </div>
+                    </div>
+
+                    <!-- Plan Card: RSU -->
+                    <div class="plan-card">
+                        <div class="plan-card__header">
+                            <div class="plan-card__name">RSU Award 2024</div>
+                            <span class="eq-badge eq-badge--success">Active</span>
+                        </div>
+                        <div class="plan-card__value">£27,232</div>
+                        <div class="plan-card__detail">
+                            Total shares: 7,320<br>
+                            Vested: 2,440 (33%)<br>
+                            Next vest: 15 Jun 2026
+                        </div>
+                        <div class="plan-card__footer">
+                            <span class="eq-text-xs eq-text-muted">3-year vesting schedule</span>
+                            <a href="#" class="eq-btn eq-btn--ghost eq-btn--sm">View details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Dates -->
+                <div class="eq-card">
+                    <div class="eq-card__header">
+                        <div class="eq-card__title">Upcoming Dates</div>
+                        <a href="#" class="eq-btn eq-btn--ghost eq-btn--sm">View calendar</a>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-item__cal">
+                            <span class="date-item__cal-month">Mar</span>
+                            <span class="date-item__cal-day">15</span>
+                        </div>
+                        <div>
+                            <div class="date-item__text">SAYE Maturity window opens</div>
+                            <div class="date-item__sub">SAYE 2023 · 30-day window to decide</div>
+                        </div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-item__cal">
+                            <span class="date-item__cal-month">Apr</span>
+                            <span class="date-item__cal-day">6</span>
+                        </div>
+                        <div>
+                            <div class="date-item__text">New tax year begins</div>
+                            <div class="date-item__sub">CGT allowance resets to £3,000</div>
+                        </div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-item__cal">
+                            <span class="date-item__cal-month">Jun</span>
+                            <span class="date-item__cal-day">15</span>
+                        </div>
+                        <div>
+                            <div class="date-item__text">RSU vest date — Tranche 2</div>
+                            <div class="date-item__sub">RSU Award 2024 · 2,440 shares vesting</div>
+                        </div>
+                    </div>
+                    <div class="date-item">
+                        <div class="date-item__cal">
+                            <span class="date-item__cal-month">Sep</span>
+                            <span class="date-item__cal-day">1</span>
+                        </div>
+                        <div>
+                            <div class="date-item__text">SIP enrollment window opens</div>
+                            <div class="date-item__sub">Annual opportunity to adjust contributions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/comments.js"></script>
+</body>
+</html>

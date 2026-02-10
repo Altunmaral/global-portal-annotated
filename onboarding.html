@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Welcome</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/comments.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Onboarding-specific styles */
+        body {
+            background: var(--eq-gray-50);
+        }
+
+        .onboarding-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top bar */
+        .onboarding-topbar {
+            background: var(--eq-navy);
+            padding: var(--space-4) var(--space-8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .onboarding-topbar__logo {
+            color: var(--eq-white);
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+        }
+        .onboarding-topbar__logo span {
+            color: var(--eq-teal-light);
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-medium);
+            margin-left: var(--space-3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .onboarding-topbar__skip {
+            color: rgba(255,255,255,0.6);
+            font-size: var(--fs-sm);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color var(--transition-fast);
+        }
+        .onboarding-topbar__skip:hover {
+            color: var(--eq-white);
+        }
+
+        /* Progress bar */
+        .onboarding-progress {
+            background: var(--eq-navy-dark);
+            padding: 0 var(--space-8);
+            height: 6px;
+        }
+        .onboarding-progress__bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--eq-teal), var(--eq-lime));
+            border-radius: 0 3px 3px 0;
+            transition: width var(--transition-slow);
+        }
+
+        /* Main content */
+        .onboarding-content {
+            flex: 1;
+            display: flex;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: var(--space-10) var(--space-8);
+            gap: var(--space-10);
+        }
+
+        /* Left side - main content */
+        .onboarding-main {
+            flex: 1;
+        }
+        .onboarding-step-label {
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-bold);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--eq-teal-dark);
+            margin-bottom: var(--space-3);
+        }
+        .onboarding-title {
+            font-size: 32px;
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            line-height: var(--lh-tight);
+            margin-bottom: var(--space-3);
+        }
+        .onboarding-desc {
+            font-size: var(--fs-md);
+            color: var(--eq-gray-500);
+            line-height: var(--lh-relaxed);
+            margin-bottom: var(--space-8);
+            max-width: 520px;
+        }
+
+        /* Visual area */
+        .onboarding-visual {
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: var(--space-8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dashboard preview */
+        .preview-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+        }
+        .preview-card {
+            background: var(--eq-gray-50);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+        }
+        .preview-card__label {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-2);
+        }
+        .preview-card__value {
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+        }
+
+        /* Tooltip callouts on preview */
+        .callout {
+            position: absolute;
+            background: var(--eq-teal);
+            color: var(--eq-white);
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-semibold);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .callout::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+        .callout--top-left {
+            top: var(--space-3);
+            left: var(--space-3);
+        }
+        .callout--top-right {
+            top: var(--space-3);
+            right: var(--space-3);
+        }
+        .callout--bottom-left {
+            bottom: var(--space-3);
+            left: var(--space-3);
+        }
+
+        /* Navigation dots */
+        .onboarding-dots {
+            display: flex;
+            gap: var(--space-2);
+            justify-content: center;
+            margin-bottom: var(--space-6);
+        }
+        .onboarding-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--eq-gray-300);
+            transition: all var(--transition-fast);
+            border: none;
+            cursor: pointer;
+        }
+        .onboarding-dot.active {
+            background: var(--eq-teal);
+            width: 28px;
+            border-radius: 5px;
+        }
+        .onboarding-dot.completed {
+            background: var(--eq-success);
+        }
+
+        /* Navigation buttons */
+        .onboarding-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Right side - checklist */
+        .onboarding-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        .checklist {
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            box-shadow: var(--shadow-sm);
+        }
+        .checklist__header {
+            font-size: var(--fs-base);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-2);
+        }
+        .checklist__progress {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+            margin-bottom: var(--space-4);
+        }
+        .checklist__item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-3);
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--eq-gray-100);
+        }
+        .checklist__item:last-child {
+            border-bottom: none;
+        }
+        .checklist__check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .checklist__check--done {
+            background: var(--eq-success);
+            color: var(--eq-white);
+        }
+        .checklist__check--active {
+            background: var(--eq-teal);
+            color: var(--eq-white);
+            box-shadow: 0 0 0 4px rgba(0,165,181,0.15);
+        }
+        .checklist__check--pending {
+            background: var(--eq-gray-100);
+            border: 2px solid var(--eq-gray-300);
+            color: var(--eq-gray-300);
+        }
+        .checklist__text {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+            line-height: var(--lh-normal);
+        }
+        .checklist__item.done .checklist__text {
+            color: var(--eq-success);
+            text-decoration: line-through;
+            text-decoration-color: rgba(40,167,69,0.3);
+        }
+        .checklist__item.active .checklist__text {
+            color: var(--eq-navy);
+            font-weight: var(--fw-semibold);
+        }
+
+        /* Gamification */
+        .reward-banner {
+            background: linear-gradient(135deg, rgba(0,165,181,0.08), rgba(168,212,0,0.08));
+            border: 1px solid rgba(0,165,181,0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-top: var(--space-5);
+            text-align: center;
+        }
+        .reward-banner__icon {
+            font-size: 32px;
+            margin-bottom: var(--space-2);
+        }
+        .reward-banner__text {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+        }
+        .reward-banner__text strong {
+            color: var(--eq-teal-dark);
+        }
+
+        @media (max-width: 900px) {
+            .onboarding-content {
+                flex-direction: column;
+                padding: var(--space-6) var(--space-4);
+            }
+            .onboarding-sidebar { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="onboarding-wrapper">
+        <!-- Top Bar -->
+        <div class="onboarding-topbar">
+            <div class="onboarding-topbar__logo">
+                EQ <span>Global Portal</span>
+            </div>
+            <button class="onboarding-topbar__skip">Skip setup — I'll explore on my own →</button>
+        </div>
+
+        <!-- Progress -->
+        <div class="onboarding-progress">
+            <div class="onboarding-progress__bar" style="width: 60%;"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="onboarding-content">
+            <!-- Main Area -->
+            <div class="onboarding-main">
+                <div class="onboarding-step-label">Step 3 of 5</div>
+                <h1 class="onboarding-title">Here's your portfolio<br>at a glance</h1>
+                <p class="onboarding-desc">
+                    This is your dashboard — you'll see all your share plans, their current values, and any actions that need your attention. Everything in one place.
+                </p>
+
+                <!-- Visual Preview -->
+                <div class="onboarding-visual">
+                    <!-- Callout tooltips -->
+                    <div class="callout callout--top-left">👈 Your total portfolio value</div>
+                    <div class="callout callout--top-right">Actions that need you →</div>
+                    <div class="callout callout--bottom-left">📊 Your plans overview</div>
+
+                    <!-- Mock dashboard preview -->
+                    <div style="padding: var(--space-4) var(--space-4) 0;">
+                        <!-- Mini nav -->
+                        <div style="background: var(--eq-navy); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); margin-bottom: var(--space-4); display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color: var(--eq-white); font-weight:600; font-size: var(--fs-sm);">EQ Dashboard</span>
+                            <span style="color: rgba(255,255,255,0.5); font-size: var(--fs-xs);">John Davies</span>
+                        </div>
+
+                        <div class="preview-dashboard">
+                            <div class="preview-card" style="grid-column: 1 / -1;">
+                                <div class="preview-card__label">Total Portfolio Value</div>
+                                <div class="preview-card__value">£47,832.50</div>
+                                <div style="display:flex; gap:var(--space-4); margin-top:var(--space-2);">
+                                    <span class="eq-text-xs" style="color:var(--eq-teal-dark);">● Tax-free: £18,200</span>
+                                    <span class="eq-text-xs" style="color:var(--eq-navy-light);">● Taxable: £29,632</span>
+                                </div>
+                            </div>
+                            <div class="preview-card">
+                                <div class="preview-card__label">SAYE 2023</div>
+                                <div style="font-weight:700; color:var(--eq-navy);">£12,400</div>
+                                <span class="eq-badge eq-badge--warning" style="margin-top:var(--space-2);">Maturing</span>
+                            </div>
+                            <div class="preview-card">
+                                <div class="preview-card__label">SIP Partnership</div>
+                                <div style="font-weight:700; color:var(--eq-navy);">£8,200</div>
+                                <span class="eq-badge eq-badge--success" style="margin-top:var(--space-2);">Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dots & Navigation -->
+                <div class="onboarding-dots">
+                    <button class="onboarding-dot completed"></button>
+                    <button class="onboarding-dot completed"></button>
+                    <button class="onboarding-dot active"></button>
+                    <button class="onboarding-dot"></button>
+                    <button class="onboarding-dot"></button>
+                </div>
+
+                <div class="onboarding-nav">
+                    <button class="eq-btn eq-btn--secondary">← Back</button>
+                    <button class="eq-btn eq-btn--primary eq-btn--lg">Next: Add Bank Details →</button>
+                </div>
+            </div>
+
+            <!-- Sidebar: Checklist -->
+            <div class="onboarding-sidebar">
+                <div class="checklist">
+                    <div class="checklist__header">Setup Checklist</div>
+                    <div class="checklist__progress">3 of 5 complete · Almost there!</div>
+
+                    <div class="eq-progress eq-mb-4">
+                        <div class="eq-progress__bar" style="width: 60%;"></div>
+                    </div>
+
+                    <div class="checklist__item done">
+                        <div class="checklist__check checklist__check--done">✓</div>
+                        <div class="checklist__text">Verify your identity</div>
+                    </div>
+                    <div class="checklist__item done">
+                        <div class="checklist__check checklist__check--done">✓</div>
+                        <div class="checklist__text">Set notification preferences</div>
+                    </div>
+                    <div class="checklist__item active">
+                        <div class="checklist__check checklist__check--active">3</div>
+                        <div class="checklist__text">Tour your dashboard</div>
+                    </div>
+                    <div class="checklist__item">
+                        <div class="checklist__check checklist__check--pending"></div>
+                        <div class="checklist__text">Add bank details</div>
+                    </div>
+                    <div class="checklist__item">
+                        <div class="checklist__check checklist__check--pending"></div>
+                        <div class="checklist__text">Set dividend mandate</div>
+                    </div>
+                </div>
+
+                <!-- Gamification / Reward -->
+                <div class="reward-banner">
+                    <div class="reward-banner__icon">🏆</div>
+                    <div class="reward-banner__text">
+                        Complete your setup to unlock your<br>
+                        <strong>Share Plan Pro</strong> badge!
+                    </div>
+                </div>
+
+                <!-- Why it matters -->
+                <div class="eq-card eq-mt-4" style="padding: var(--space-4);">
+                    <div style="font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--eq-navy); margin-bottom: var(--space-2);">
+                        💡 Why add bank details?
+                    </div>
+                    <div class="eq-text-sm eq-text-muted" style="line-height: var(--lh-relaxed);">
+                        Without bank details, your dividends can't be paid to you automatically. Some employees have had thousands of pounds sitting unclaimed.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/comments.js"></script>
+</body>
+</html>

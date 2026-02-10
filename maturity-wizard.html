@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Maturity Decision Wizard</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/comments.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Wizard-specific styles */
+        .wizard-container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* Step navigation */
+        .wizard-steps {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+        .wizard-step {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        .wizard-step__num {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-bold);
+            background: var(--eq-gray-100);
+            color: var(--eq-gray-400);
+            border: 2px solid var(--eq-gray-200);
+            flex-shrink: 0;
+            transition: all var(--transition-base);
+        }
+        .wizard-step.completed .wizard-step__num {
+            background: var(--eq-success);
+            border-color: var(--eq-success);
+            color: var(--eq-white);
+        }
+        .wizard-step.active .wizard-step__num {
+            background: var(--eq-teal);
+            border-color: var(--eq-teal);
+            color: var(--eq-white);
+        }
+        .wizard-step__text {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-400);
+            font-weight: var(--fw-medium);
+        }
+        .wizard-step.active .wizard-step__text {
+            color: var(--eq-navy);
+            font-weight: var(--fw-semibold);
+        }
+        .wizard-step.completed .wizard-step__text {
+            color: var(--eq-success);
+        }
+        .wizard-step__line {
+            flex: 1;
+            height: 2px;
+            background: var(--eq-gray-200);
+            margin: 0 var(--space-3);
+        }
+        .wizard-step__line.completed {
+            background: var(--eq-success);
+        }
+
+        .wizard-step-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-8);
+            padding: 0 var(--space-1);
+        }
+        .wizard-step-labels span {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+            text-align: center;
+        }
+        .wizard-step-labels span.active {
+            color: var(--eq-teal-dark);
+            font-weight: var(--fw-semibold);
+        }
+
+        /* Option cards */
+        .option-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+        .option-card {
+            border: 2px solid var(--eq-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            background: var(--eq-white);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            position: relative;
+        }
+        .option-card:hover {
+            border-color: var(--eq-teal);
+            box-shadow: var(--shadow-md);
+        }
+        .option-card.selected {
+            border-color: var(--eq-teal);
+            background: rgba(0,165,181,0.03);
+            box-shadow: 0 0 0 3px rgba(0,165,181,0.15);
+        }
+        .option-card.recommended {
+            border-color: var(--eq-teal);
+        }
+        .option-card__recommended {
+            position: absolute;
+            top: -1px;
+            right: var(--space-5);
+            background: var(--eq-teal);
+            color: var(--eq-white);
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-bold);
+            padding: var(--space-1) var(--space-3);
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+        }
+        .option-card__label {
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-bold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--eq-gray-400);
+            margin-bottom: var(--space-2);
+        }
+        .option-card__title {
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-4);
+        }
+        .option-card__amount {
+            font-size: var(--fs-3xl);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-4);
+            line-height: 1;
+        }
+        .option-card__breakdown {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+            line-height: var(--lh-relaxed);
+        }
+        .option-card__breakdown dt {
+            display: inline;
+            color: var(--eq-gray-500);
+        }
+        .option-card__breakdown dd {
+            display: inline;
+            margin-left: 0;
+            font-weight: var(--fw-medium);
+        }
+        .option-card__breakdown .divider {
+            border-top: 1px dashed var(--eq-gray-200);
+            margin: var(--space-2) 0;
+        }
+        .option-card__timeline {
+            margin-top: var(--space-4);
+            padding-top: var(--space-3);
+            border-top: 1px solid var(--eq-gray-100);
+            font-size: var(--fs-sm);
+        }
+        .option-card__cta {
+            margin-top: var(--space-5);
+        }
+
+        /* Tax breakdown */
+        .tax-breakdown {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--space-1) var(--space-4);
+            font-size: var(--fs-sm);
+            line-height: var(--lh-relaxed);
+        }
+        .tax-breakdown dt {
+            color: var(--eq-gray-500);
+        }
+        .tax-breakdown dd {
+            text-align: right;
+            font-weight: var(--fw-medium);
+            color: var(--eq-gray-700);
+        }
+        .tax-breakdown .total {
+            grid-column: 1 / -1;
+            border-top: 2px solid var(--eq-gray-200);
+            padding-top: var(--space-2);
+            margin-top: var(--space-2);
+            display: flex;
+            justify-content: space-between;
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+            font-size: var(--fs-md);
+        }
+
+        /* Sidebar panels */
+        .wizard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+
+        .sidebar-panel {
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+        }
+        .sidebar-panel--accent {
+            background: rgba(0,165,181,0.04);
+            border-color: var(--eq-teal);
+        }
+        .sidebar-panel__title {
+            font-size: var(--fs-base);
+            font-weight: var(--fw-semibold);
+            color: var(--eq-navy);
+            margin-bottom: var(--space-3);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--fs-sm);
+            padding: var(--space-1) 0;
+            line-height: var(--lh-relaxed);
+        }
+        .summary-row dt { color: var(--eq-gray-500); }
+        .summary-row dd { font-weight: var(--fw-medium); color: var(--eq-gray-700); }
+
+        /* Calculator */
+        .calculator-input-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin: var(--space-3) 0;
+        }
+        .calculator-input-group .eq-input {
+            flex: 1;
+        }
+        .calculator-result {
+            background: var(--eq-gray-50);
+            border-radius: var(--radius-md);
+            padding: var(--space-3);
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+            margin-top: var(--space-2);
+        }
+        .calculator-result strong {
+            color: var(--eq-navy);
+        }
+
+        /* Info tooltip inline */
+        .info-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: var(--fs-sm);
+            color: var(--eq-teal-dark);
+            cursor: pointer;
+        }
+        .info-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .option-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="eq-app">
+        <!-- Sidebar (same as dashboard) -->
+        <aside class="eq-sidebar">
+            <div class="eq-sidebar__logo">
+                <h2>EQ</h2>
+                <span>Global Portal</span>
+            </div>
+            <nav class="eq-sidebar__nav">
+                <div class="eq-sidebar__section-label">Main</div>
+                <a href="dashboard.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📊</span> Dashboard
+                </a>
+                <a href="#" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📁</span> My Plans
+                </a>
+                <a href="maturity-wizard.html" class="eq-nav-item active">
+                    <span class="eq-nav-item__icon">🧭</span> Maturity Wizard
+                </a>
+                <a href="transaction-tracker.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📦</span> Transactions
+                </a>
+                <div class="eq-sidebar__section-label">Resources</div>
+                <a href="education-hub.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">🎓</span> Learn
+                </a>
+                <a href="document-repository.html" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">📄</span> Documents
+                </a>
+                <div class="eq-sidebar__section-label">Account</div>
+                <a href="#" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">⚙️</span> Settings
+                </a>
+                <a href="#" class="eq-nav-item">
+                    <span class="eq-nav-item__icon">❓</span> Help & Support
+                </a>
+            </nav>
+        </aside>
+
+        <main class="eq-main">
+            <header class="eq-header">
+                <div class="eq-header__left">
+                    <div class="eq-header__breadcrumb">
+                        <a href="dashboard.html">Dashboard</a> / <span>Maturity Decision Wizard</span>
+                    </div>
+                </div>
+                <div class="eq-header__right">
+                    <button class="eq-header__notification" aria-label="Notifications">🔔<span class="eq-header__notification-dot"></span></button>
+                    <div class="eq-header__user">
+                        <div>
+                            <div class="eq-header__username">John Davies</div>
+                            <div class="eq-header__role">Lloyds Banking Group</div>
+                        </div>
+                        <div class="eq-header__avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="eq-content">
+                <div class="wizard-container">
+                    <!-- Step Indicator -->
+                    <div class="wizard-steps">
+                        <div class="wizard-step completed">
+                            <div class="wizard-step__num">✓</div>
+                        </div>
+                        <div class="wizard-step__line completed"></div>
+                        <div class="wizard-step completed">
+                            <div class="wizard-step__num">✓</div>
+                        </div>
+                        <div class="wizard-step__line completed"></div>
+                        <div class="wizard-step active">
+                            <div class="wizard-step__num">3</div>
+                        </div>
+                        <div class="wizard-step__line"></div>
+                        <div class="wizard-step">
+                            <div class="wizard-step__num">4</div>
+                        </div>
+                        <div class="wizard-step__line"></div>
+                        <div class="wizard-step">
+                            <div class="wizard-step__num">5</div>
+                        </div>
+                    </div>
+                    <div class="wizard-step-labels">
+                        <span>Your Plan</span>
+                        <span>Your Options</span>
+                        <span class="active">Compare</span>
+                        <span>Confirm</span>
+                        <span>Done</span>
+                    </div>
+
+                    <!-- Page Title -->
+                    <h1 class="eq-page-title">Compare Your Options</h1>
+                    <p class="eq-page-subtitle">See exactly what you'll receive after tax for each option. Take your time — your maturity window closes on 14 April 2026.</p>
+
+                    <!-- Alert -->
+                    <div class="eq-alert eq-alert--info eq-mb-6">
+                        <span class="eq-alert__icon">💡</span>
+                        <div>
+                            <strong>Tip:</strong> If you're unsure, the ISA transfer is often a good option — your shares grow tax-free with no CGT on future gains.
+                            <a href="education-hub.html" class="info-link" style="margin-left:4px;">Watch: ISA benefits (2 min) →</a>
+                        </div>
+                    </div>
+
+                    <!-- Main layout -->
+                    <div class="eq-grid eq-grid--sidebar" style="align-items: start;">
+                        <div>
+                            <!-- Option Cards -->
+                            <div class="option-cards">
+                                <!-- Option A: Sell All -->
+                                <div class="option-card selected">
+                                    <div class="option-card__label">Option A</div>
+                                    <div class="option-card__title">Sell All Shares</div>
+                                    <div class="option-card__amount">£11,847</div>
+                                    <div class="option-card__breakdown">
+                                        <dl class="tax-breakdown">
+                                            <dt>Shares value</dt>
+                                            <dd>£12,400</dd>
+                                            <dt>Your savings</dt>
+                                            <dd>£8,000</dd>
+                                            <dt>Gain</dt>
+                                            <dd>£4,400</dd>
+                                            <dt>CGT allowance used</dt>
+                                            <dd>£3,000</dd>
+                                            <dt>Taxable gain</dt>
+                                            <dd>£1,400</dd>
+                                            <dt>CGT owed (20%)</dt>
+                                            <dd class="eq-text-danger">-£280</dd>
+                                            <dt>Dealing fee</dt>
+                                            <dd>-£25.00</dd>
+                                            <div class="total">
+                                                <span>You receive</span>
+                                                <span>£11,847.00</span>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="option-card__timeline eq-text-success">
+                                        💰 Cash in your account within 5–7 working days
+                                    </div>
+                                    <div class="option-card__cta">
+                                        <button class="eq-btn eq-btn--primary eq-btn--full">Select this option</button>
+                                    </div>
+                                </div>
+
+                                <!-- Option B: Transfer to ISA -->
+                                <div class="option-card recommended">
+                                    <div class="option-card__recommended">Recommended</div>
+                                    <div class="option-card__label">Option B</div>
+                                    <div class="option-card__title">Transfer to ISA</div>
+                                    <div class="option-card__amount">£12,400</div>
+                                    <div class="option-card__breakdown">
+                                        <dl class="tax-breakdown">
+                                            <dt>Shares value</dt>
+                                            <dd>£12,400</dd>
+                                            <dt>Tax-free transfer</dt>
+                                            <dd class="eq-text-success">£0 CGT</dd>
+                                            <dt>Future gains</dt>
+                                            <dd class="eq-text-success">Tax-free</dd>
+                                            <dt>ISA fee</dt>
+                                            <dd>£12.50/quarter</dd>
+                                            <div class="total">
+                                                <span>Shares transferred</span>
+                                                <span>£12,400.00</span>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="option-card__timeline eq-text-teal">
+                                        📦 Shares in your ISA within 3 working days
+                                    </div>
+                                    <div class="option-card__cta">
+                                        <button class="eq-btn eq-btn--navy eq-btn--full">Select this option</button>
+                                    </div>
+                                </div>
+
+                                <!-- Option C: Return Savings -->
+                                <div class="option-card">
+                                    <div class="option-card__label">Option C</div>
+                                    <div class="option-card__title">Return My Savings</div>
+                                    <div class="option-card__amount">£8,000</div>
+                                    <div class="option-card__breakdown">
+                                        <dl class="tax-breakdown">
+                                            <dt>Your total savings</dt>
+                                            <dd>£8,000</dd>
+                                            <dt>Bonus interest</dt>
+                                            <dd>£0</dd>
+                                            <dt>Tax implications</dt>
+                                            <dd class="eq-text-success">None</dd>
+                                            <div class="total">
+                                                <span>You receive</span>
+                                                <span>£8,000.00</span>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="option-card__timeline eq-text-muted">
+                                        No shares purchased. You forgo £4,400 in potential gain.
+                                    </div>
+                                    <div class="option-card__cta">
+                                        <button class="eq-btn eq-btn--secondary eq-btn--full">Select this option</button>
+                                    </div>
+                                </div>
+
+                                <!-- Option D: Keep Shares -->
+                                <div class="option-card">
+                                    <div class="option-card__label">Option D</div>
+                                    <div class="option-card__title">Keep Shares in Certificate</div>
+                                    <div class="option-card__amount">£12,400</div>
+                                    <div class="option-card__breakdown">
+                                        <dl class="tax-breakdown">
+                                            <dt>Shares value (today)</dt>
+                                            <dd>£12,400</dd>
+                                            <dt>Market risk</dt>
+                                            <dd>Value may change</dd>
+                                            <dt>CGT when sold</dt>
+                                            <dd>Applies later</dd>
+                                            <div class="total">
+                                                <span>Current value</span>
+                                                <span>£12,400.00</span>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="option-card__timeline eq-text-muted">
+                                        Hold shares in your name. Sell whenever you choose.
+                                    </div>
+                                    <div class="option-card__cta">
+                                        <button class="eq-btn eq-btn--secondary eq-btn--full">Select this option</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation buttons -->
+                            <div class="eq-flex eq-flex--between eq-mt-6">
+                                <button class="eq-btn eq-btn--secondary">← Back to Options</button>
+                                <button class="eq-btn eq-btn--primary eq-btn--lg">Continue to Confirm →</button>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="wizard-sidebar">
+                            <!-- Plan Summary -->
+                            <div class="sidebar-panel">
+                                <div class="sidebar-panel__title">📋 Your SAYE Summary</div>
+                                <dl>
+                                    <div class="summary-row"><dt>Plan</dt><dd>SAYE 2023</dd></div>
+                                    <div class="summary-row"><dt>Savings</dt><dd>£8,000</dd></div>
+                                    <div class="summary-row"><dt>Option price</dt><dd>£2.40</dd></div>
+                                    <div class="summary-row"><dt>Current price</dt><dd>£3.72</dd></div>
+                                    <div class="summary-row"><dt>Shares</dt><dd>3,333</dd></div>
+                                    <div class="summary-row"><dt>Potential gain</dt><dd style="color: var(--eq-success); font-weight:700;">£4,400</dd></div>
+                                </dl>
+                                <hr class="eq-divider" style="margin: var(--space-3) 0;">
+                                <div class="eq-text-xs eq-text-muted">
+                                    Window closes: <strong>14 April 2026</strong><br>
+                                    30 days remaining
+                                </div>
+                            </div>
+
+                            <!-- "I need £X" Calculator -->
+                            <div class="sidebar-panel sidebar-panel--accent">
+                                <div class="sidebar-panel__title">🧮 "I need £X" Calculator</div>
+                                <p class="eq-text-sm eq-text-muted eq-mb-4">Enter the amount you need and we'll calculate how many shares to sell.</p>
+                                <label class="eq-input-group__label">I need this amount:</label>
+                                <div class="calculator-input-group">
+                                    <span style="font-weight:600; color: var(--eq-navy);">£</span>
+                                    <input type="number" class="eq-input" placeholder="5,000" value="5000">
+                                    <button class="eq-btn eq-btn--primary eq-btn--sm">Calculate</button>
+                                </div>
+                                <div class="calculator-result">
+                                    To receive <strong>£5,000</strong> after tax, sell <strong>1,420 shares</strong>.<br>
+                                    <span class="eq-text-xs eq-text-muted">CGT: £97 · Fee: £25 · Net: £5,002</span>
+                                </div>
+                            </div>
+
+                            <!-- Help panel -->
+                            <div class="sidebar-panel">
+                                <div class="sidebar-panel__title">ℹ️ Need help deciding?</div>
+                                <div class="eq-flex eq-flex--col eq-flex--gap-2">
+                                    <a href="education-hub.html" class="info-link">📹 Watch: Maturity explained (2 min)</a>
+                                    <a href="#" class="info-link">📹 Watch: CGT explained simply (1:48)</a>
+                                    <a href="#" class="info-link">📹 Watch: ISA benefits for you (2:30)</a>
+                                    <a href="#" class="info-link">📖 Read: Your maturity options guide</a>
+                                </div>
+                                <hr class="eq-divider" style="margin: var(--space-3) 0;">
+                                <p class="eq-text-xs eq-text-muted">Still unsure? Call us on <strong>0345 123 4567</strong> or <a href="#">start a live chat</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/comments.js"></script>
+</body>
+</html>

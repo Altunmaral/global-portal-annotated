@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Documents</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/comments.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Document Repository styles */
+        .doc-filters {
+            display: flex;
+            gap: var(--space-3);
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: var(--space-6);
+        }
+        .doc-filters .eq-input,
+        .doc-filters .eq-select {
+            height: 38px;
+            font-size: var(--fs-sm);
+        }
+        .doc-filters .eq-input {
+            max-width: 280px;
+        }
+
+        /* Document table */
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--eq-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--eq-gray-200);
+        }
+        .doc-table th {
+            text-align: left;
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--eq-gray-500);
+            padding: var(--space-4) var(--space-5);
+            background: var(--eq-gray-50);
+            border-bottom: 2px solid var(--eq-gray-200);
+            white-space: nowrap;
+        }
+        .doc-table td {
+            padding: var(--space-4) var(--space-5);
+            border-bottom: 1px solid var(--eq-gray-100);
+            font-size: var(--fs-base);
+            color: var(--eq-gray-700);
+            vertical-align: middle;
+        }
+        .doc-table tbody tr {
+            transition: background var(--transition-fast);
+        }
+        .doc-table tbody tr:hover {
+            background: var(--eq-gray-50);
+        }
+        .doc-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .doc-name {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        .doc-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-md);
+            flex-shrink: 0;
+        }
+        .doc-icon--pdf { background: #FDE8E8; color: #DC3545; }
+        .doc-icon--statement { background: #D1ECF1; color: #17A2B8; }
+        .doc-icon--tax { background: #D4EDDA; color: #28A745; }
+        .doc-icon--letter { background: #E8F0FE; color: #4A7DD4; }
+
+        .doc-name__text {
+            font-weight: var(--fw-medium);
+            color: var(--eq-navy);
+        }
+        .doc-name__sub {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+            margin-top: 1px;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: var(--space-3);
+        }
+        .doc-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: var(--space-1) var(--space-3);
+            font-size: var(--fs-xs);
+            font-weight: var(--fw-semibold);
+            color: var(--eq-teal-dark);
+            background: none;
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .doc-action-btn:hover {
+            background: rgba(0,165,181,0.06);
+            border-color: var(--eq-teal);
+        }
+
+        /* Tax pack banner */
+        .tax-banner {
+            background: linear-gradient(135deg, var(--eq-navy) 0%, var(--eq-teal-dark) 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6) var(--space-8);
+            color: var(--eq-white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+        .tax-banner__content h3 {
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+            margin-bottom: var(--space-1);
+        }
+        .tax-banner__content p {
+            font-size: var(--fs-sm);
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+        }
+
+        /* Stats row */
+        .doc-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-4);
+            margin-bottom: var(--space-6);
+        }
+        .doc-stat-card {
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4) var(--space-5);
+            text-align: center;
+        }
+        .doc-stat-card__value {
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            color: var(--eq-navy);
+        }
+        .doc-stat-card__label {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-500);
+            margin-top: var(--space-1);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-4) var(--space-5);
+            border-top: 1px solid var(--eq-gray-200);
+            background: var(--eq-gray-50);
+        }
+        .pagination__info {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-500);
+        }
+        .pagination__controls {
+            display: flex;
+            gap: var(--space-1);
+        }
+        .pagination__btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--eq-gray-200);
+            background: var(--eq-white);
+            border-radius: var(--radius-sm);
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .pagination__btn:hover {
+            border-color: var(--eq-teal);
+            color: var(--eq-teal-dark);
+        }
+        .pagination__btn.active {
+            background: var(--eq-teal);
+            border-color: var(--eq-teal);
+            color: var(--eq-white);
+        }
+
+        @media (max-width: 768px) {
+            .doc-stats { grid-template-columns: repeat(2, 1fr); }
+            .tax-banner { flex-direction: column; gap: var(--space-4); text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="eq-app">
+        <!-- Sidebar -->
+        <aside class="eq-sidebar">
+            <div class="eq-sidebar__logo"><h2>EQ</h2><span>Global Portal</span></div>
+            <nav class="eq-sidebar__nav">
+                <div class="eq-sidebar__section-label">Main</div>
+                <a href="dashboard.html" class="eq-nav-item"><span class="eq-nav-item__icon">📊</span> Dashboard</a>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">📁</span> My Plans</a>
+                <a href="maturity-wizard.html" class="eq-nav-item"><span class="eq-nav-item__icon">🧭</span> Maturity Wizard</a>
+                <a href="transaction-tracker.html" class="eq-nav-item"><span class="eq-nav-item__icon">📦</span> Transactions</a>
+                <div class="eq-sidebar__section-label">Resources</div>
+                <a href="education-hub.html" class="eq-nav-item"><span class="eq-nav-item__icon">🎓</span> Learn</a>
+                <a href="document-repository.html" class="eq-nav-item active"><span class="eq-nav-item__icon">📄</span> Documents</a>
+                <div class="eq-sidebar__section-label">Account</div>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">⚙️</span> Settings</a>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">❓</span> Help & Support</a>
+            </nav>
+        </aside>
+
+        <main class="eq-main">
+            <header class="eq-header">
+                <div class="eq-header__left">
+                    <div class="eq-header__breadcrumb">
+                        <a href="dashboard.html">Dashboard</a> / <span>Documents</span>
+                    </div>
+                </div>
+                <div class="eq-header__right">
+                    <button class="eq-header__notification" aria-label="Notifications">🔔<span class="eq-header__notification-dot"></span></button>
+                    <div class="eq-header__user">
+                        <div>
+                            <div class="eq-header__username">John Davies</div>
+                            <div class="eq-header__role">Lloyds Banking Group</div>
+                        </div>
+                        <div class="eq-header__avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="eq-content">
+                <h1 class="eq-page-title">My Documents</h1>
+                <p class="eq-page-subtitle">All your share plan documents in one place — contract notes, tax statements, dividends, and more.</p>
+
+                <!-- Tax Pack Banner -->
+                <div class="tax-banner">
+                    <div class="tax-banner__content">
+                        <h3>🧾 Preparing your tax return?</h3>
+                        <p>Download your complete tax pack for 2025/26 — includes all gains, dividends, and base cost information in HMRC-ready format.</p>
+                    </div>
+                    <button class="eq-btn eq-btn--primary eq-btn--lg" style="background:#fff; color:var(--eq-navy); border-color:#fff;">Download Tax Pack 2025/26</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="doc-stats">
+                    <div class="doc-stat-card">
+                        <div class="doc-stat-card__value">24</div>
+                        <div class="doc-stat-card__label">Total Documents</div>
+                    </div>
+                    <div class="doc-stat-card">
+                        <div class="doc-stat-card__value">8</div>
+                        <div class="doc-stat-card__label">This Tax Year</div>
+                    </div>
+                    <div class="doc-stat-card">
+                        <div class="doc-stat-card__value">3</div>
+                        <div class="doc-stat-card__label">New This Month</div>
+                    </div>
+                    <div class="doc-stat-card">
+                        <div class="doc-stat-card__value">4</div>
+                        <div class="doc-stat-card__label">Tax Documents</div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="doc-filters">
+                    <input type="text" class="eq-input" placeholder="🔍 Search documents...">
+                    <select class="eq-input eq-select" style="max-width:160px;">
+                        <option>Tax Year: 2025/26</option>
+                        <option>Tax Year: 2024/25</option>
+                        <option>Tax Year: 2023/24</option>
+                        <option>All Tax Years</option>
+                    </select>
+                    <select class="eq-input eq-select" style="max-width:140px;">
+                        <option>All Plans</option>
+                        <option>SAYE 2023</option>
+                        <option>SIP Partnership</option>
+                        <option>RSU Award 2024</option>
+                    </select>
+                    <select class="eq-input eq-select" style="max-width:140px;">
+                        <option>All Types</option>
+                        <option>Contract Notes</option>
+                        <option>Tax Statements</option>
+                        <option>Dividends</option>
+                        <option>Vesting</option>
+                    </select>
+                    <div style="flex:1;"></div>
+                    <button class="eq-btn eq-btn--secondary eq-btn--sm">⬇ Download All</button>
+                </div>
+
+                <!-- Document Table -->
+                <div style="border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--eq-gray-200);">
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%;">Document</th>
+                                <th>Plan</th>
+                                <th>Date</th>
+                                <th>Tax Year</th>
+                                <th style="text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--pdf">📄</div>
+                                        <div>
+                                            <div class="doc-name__text">Contract Note — Sale of 1,500 shares</div>
+                                            <div class="doc-name__sub">PDF · 142 KB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">SAYE 2023</span></td>
+                                <td class="eq-text-sm">11 Mar 2026</td>
+                                <td class="eq-text-sm">2025/26</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--statement">📊</div>
+                                        <div>
+                                            <div class="doc-name__text">Dividend Statement — Q4 2025</div>
+                                            <div class="doc-name__sub">PDF · 98 KB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">SIP</span></td>
+                                <td class="eq-text-sm">28 Feb 2026</td>
+                                <td class="eq-text-sm">2025/26</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--letter">📋</div>
+                                        <div>
+                                            <div class="doc-name__text">Post-Vesting Statement — RSU Tranche 1</div>
+                                            <div class="doc-name__sub">PDF · 156 KB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">RSU 2024</span></td>
+                                <td class="eq-text-sm">15 Dec 2025</td>
+                                <td class="eq-text-sm">2025/26</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--statement">📊</div>
+                                        <div>
+                                            <div class="doc-name__text">Dividend Statement — Q3 2025</div>
+                                            <div class="doc-name__sub">PDF · 94 KB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">SIP</span></td>
+                                <td class="eq-text-sm">28 Nov 2025</td>
+                                <td class="eq-text-sm">2025/26</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--pdf">📄</div>
+                                        <div>
+                                            <div class="doc-name__text">Contract Note — Sale of 500 shares</div>
+                                            <div class="doc-name__sub">PDF · 138 KB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">RSU 2023</span></td>
+                                <td class="eq-text-sm">3 Dec 2025</td>
+                                <td class="eq-text-sm">2025/26</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--tax">🧾</div>
+                                        <div>
+                                            <div class="doc-name__text">Annual Tax Summary 2024/25</div>
+                                            <div class="doc-name__sub">PDF · 210 KB · HMRC-ready</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">All Plans</span></td>
+                                <td class="eq-text-sm">6 Apr 2025</td>
+                                <td class="eq-text-sm">2024/25</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="doc-name">
+                                        <div class="doc-icon doc-icon--letter">📋</div>
+                                        <div>
+                                            <div class="doc-name__text">RSU Award Grant Letter 2024</div>
+                                            <div class="doc-name__sub">PDF · 180 KB</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="eq-badge eq-badge--neutral">RSU 2024</span></td>
+                                <td class="eq-text-sm">15 Mar 2024</td>
+                                <td class="eq-text-sm">2023/24</td>
+                                <td>
+                                    <div class="doc-actions" style="justify-content:flex-end;">
+                                        <button class="doc-action-btn">👁 View</button>
+                                        <button class="doc-action-btn">⬇ Download</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <div class="pagination__info">Showing 1–7 of 24 documents</div>
+                        <div class="pagination__controls">
+                            <button class="pagination__btn">←</button>
+                            <button class="pagination__btn active">1</button>
+                            <button class="pagination__btn">2</button>
+                            <button class="pagination__btn">3</button>
+                            <button class="pagination__btn">4</button>
+                            <button class="pagination__btn">→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/comments.js"></script>
+</body>
+</html>

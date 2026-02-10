@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ Global Portal — Transaction Tracker</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/comments.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Transaction tracker styles */
+        .tracker-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: var(--space-6);
+            align-items: start;
+        }
+
+        /* Active transaction card */
+        .transaction-header {
+            background: linear-gradient(135deg, var(--eq-navy) 0%, var(--eq-navy-light) 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            color: var(--eq-white);
+            margin-bottom: var(--space-6);
+        }
+        .transaction-header__ref {
+            font-size: var(--fs-xs);
+            font-family: var(--font-mono);
+            color: rgba(255,255,255,0.6);
+            margin-bottom: var(--space-2);
+        }
+        .transaction-header__title {
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            margin-bottom: var(--space-1);
+        }
+        .transaction-header__subtitle {
+            font-size: var(--fs-sm);
+            color: rgba(255,255,255,0.7);
+        }
+        .transaction-header__summary {
+            display: flex;
+            gap: var(--space-8);
+            margin-top: var(--space-5);
+            padding-top: var(--space-5);
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .transaction-header__stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .transaction-header__stat-label {
+            font-size: var(--fs-xs);
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-1);
+        }
+        .transaction-header__stat-value {
+            font-size: var(--fs-lg);
+            font-weight: var(--fw-bold);
+        }
+
+        /* Progress bar visual */
+        .progress-visual {
+            margin-bottom: var(--space-6);
+        }
+        .progress-visual__bar-container {
+            background: var(--eq-gray-100);
+            border-radius: var(--radius-full);
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: var(--space-3);
+        }
+        .progress-visual__bar {
+            height: 100%;
+            border-radius: var(--radius-full);
+            background: linear-gradient(90deg, var(--eq-success) 0%, var(--eq-teal) 100%);
+            transition: width var(--transition-slow);
+        }
+        .progress-visual__labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+        }
+
+        /* Timeline */
+        .tracker-timeline {
+            position: relative;
+            padding-left: 44px;
+        }
+        .tracker-timeline::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--eq-gray-200);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: var(--space-8);
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-item__dot {
+            position: absolute;
+            left: -44px;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-md);
+            z-index: 1;
+            background: var(--eq-white);
+            border: 2px solid var(--eq-gray-300);
+        }
+        .timeline-item.completed .timeline-item__dot {
+            background: var(--eq-success);
+            border-color: var(--eq-success);
+            color: var(--eq-white);
+        }
+        .timeline-item.active .timeline-item__dot {
+            background: var(--eq-teal);
+            border-color: var(--eq-teal);
+            color: var(--eq-white);
+            box-shadow: 0 0 0 6px rgba(0,165,181,0.15);
+            animation: pulse-dot 2s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 6px rgba(0,165,181,0.15); }
+            50% { box-shadow: 0 0 0 10px rgba(0,165,181,0.08); }
+        }
+
+        .timeline-item__card {
+            background: var(--eq-white);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            transition: border-color var(--transition-fast);
+        }
+        .timeline-item.completed .timeline-item__card {
+            border-color: var(--eq-gray-100);
+            opacity: 0.85;
+        }
+        .timeline-item.active .timeline-item__card {
+            border-color: var(--eq-teal);
+            box-shadow: var(--shadow-sm);
+        }
+        .timeline-item__title {
+            font-weight: var(--fw-semibold);
+            color: var(--eq-navy);
+            font-size: var(--fs-md);
+            margin-bottom: var(--space-1);
+        }
+        .timeline-item.active .timeline-item__title {
+            color: var(--eq-teal-dark);
+        }
+        .timeline-item__date {
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-500);
+        }
+        .timeline-item__status {
+            font-size: var(--fs-sm);
+            margin-top: var(--space-2);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        .timeline-item__details {
+            margin-top: var(--space-3);
+            padding-top: var(--space-3);
+            border-top: 1px solid var(--eq-gray-100);
+            font-size: var(--fs-sm);
+            color: var(--eq-gray-600);
+        }
+
+        /* Notification preferences */
+        .notif-options {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+        }
+        .notif-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-3);
+            border: 1px solid var(--eq-gray-200);
+            border-radius: var(--radius-md);
+            font-size: var(--fs-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .notif-option.active {
+            border-color: var(--eq-teal);
+            background: rgba(0,165,181,0.04);
+        }
+        .notif-option__toggle {
+            width: 36px;
+            height: 20px;
+            border-radius: 10px;
+            background: var(--eq-gray-300);
+            position: relative;
+            flex-shrink: 0;
+        }
+        .notif-option__toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--eq-white);
+            transition: transform var(--transition-fast);
+        }
+        .notif-option.active .notif-option__toggle {
+            background: var(--eq-teal);
+        }
+        .notif-option.active .notif-option__toggle::after {
+            transform: translateX(16px);
+        }
+
+        /* History list in sidebar */
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-2);
+            transition: background var(--transition-fast);
+            cursor: pointer;
+        }
+        .history-item:hover {
+            background: var(--eq-gray-50);
+        }
+        .history-item.active {
+            background: rgba(0,165,181,0.06);
+            border: 1px solid rgba(0,165,181,0.2);
+        }
+        .history-item__icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-base);
+            flex-shrink: 0;
+        }
+        .history-item__content {
+            flex: 1;
+            min-width: 0;
+        }
+        .history-item__name {
+            font-size: var(--fs-sm);
+            font-weight: var(--fw-semibold);
+            color: var(--eq-navy);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .history-item__meta {
+            font-size: var(--fs-xs);
+            color: var(--eq-gray-400);
+        }
+
+        @media (max-width: 1024px) {
+            .tracker-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="eq-app">
+        <!-- Sidebar -->
+        <aside class="eq-sidebar">
+            <div class="eq-sidebar__logo">
+                <h2>EQ</h2>
+                <span>Global Portal</span>
+            </div>
+            <nav class="eq-sidebar__nav">
+                <div class="eq-sidebar__section-label">Main</div>
+                <a href="dashboard.html" class="eq-nav-item"><span class="eq-nav-item__icon">📊</span> Dashboard</a>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">📁</span> My Plans</a>
+                <a href="maturity-wizard.html" class="eq-nav-item"><span class="eq-nav-item__icon">🧭</span> Maturity Wizard</a>
+                <a href="transaction-tracker.html" class="eq-nav-item active"><span class="eq-nav-item__icon">📦</span> Transactions</a>
+                <div class="eq-sidebar__section-label">Resources</div>
+                <a href="education-hub.html" class="eq-nav-item"><span class="eq-nav-item__icon">🎓</span> Learn</a>
+                <a href="document-repository.html" class="eq-nav-item"><span class="eq-nav-item__icon">📄</span> Documents</a>
+                <div class="eq-sidebar__section-label">Account</div>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">⚙️</span> Settings</a>
+                <a href="#" class="eq-nav-item"><span class="eq-nav-item__icon">❓</span> Help & Support</a>
+            </nav>
+        </aside>
+
+        <main class="eq-main">
+            <header class="eq-header">
+                <div class="eq-header__left">
+                    <div class="eq-header__breadcrumb">
+                        <a href="dashboard.html">Dashboard</a> / <span>Transaction Tracker</span>
+                    </div>
+                </div>
+                <div class="eq-header__right">
+                    <button class="eq-header__notification" aria-label="Notifications">🔔<span class="eq-header__notification-dot"></span></button>
+                    <div class="eq-header__user">
+                        <div>
+                            <div class="eq-header__username">John Davies</div>
+                            <div class="eq-header__role">Lloyds Banking Group</div>
+                        </div>
+                        <div class="eq-header__avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="eq-content">
+                <h1 class="eq-page-title">Transaction Tracker</h1>
+                <p class="eq-page-subtitle">Track your share transactions in real time, just like tracking a parcel.</p>
+
+                <div class="tracker-layout">
+                    <div>
+                        <!-- Active Transaction Header -->
+                        <div class="transaction-header">
+                            <div class="transaction-header__ref">REF: EQ-2026-4821</div>
+                            <div class="transaction-header__title">Sale — 1,500 Shares (SAYE 2023)</div>
+                            <div class="transaction-header__subtitle">Instruction placed Monday 10 March 2026</div>
+                            <div class="transaction-header__summary">
+                                <div class="transaction-header__stat">
+                                    <span class="transaction-header__stat-label">Shares</span>
+                                    <span class="transaction-header__stat-value">1,500</span>
+                                </div>
+                                <div class="transaction-header__stat">
+                                    <span class="transaction-header__stat-label">Sale Price</span>
+                                    <span class="transaction-header__stat-value">£3.72</span>
+                                </div>
+                                <div class="transaction-header__stat">
+                                    <span class="transaction-header__stat-label">Gross Value</span>
+                                    <span class="transaction-header__stat-value">£5,580.00</span>
+                                </div>
+                                <div class="transaction-header__stat">
+                                    <span class="transaction-header__stat-label">Net Payment</span>
+                                    <span class="transaction-header__stat-value">£5,502.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="progress-visual">
+                            <div class="progress-visual__bar-container">
+                                <div class="progress-visual__bar" style="width: 50%;"></div>
+                            </div>
+                            <div class="progress-visual__labels">
+                                <span>Instruction received</span>
+                                <span style="color: var(--eq-teal); font-weight:600;">Processing</span>
+                                <span>Complete</span>
+                            </div>
+                        </div>
+
+                        <!-- Timeline -->
+                        <div class="tracker-timeline">
+                            <!-- Step 1: Instruction Received -->
+                            <div class="timeline-item completed">
+                                <div class="timeline-item__dot">✓</div>
+                                <div class="timeline-item__card">
+                                    <div class="timeline-item__title">Instruction Received</div>
+                                    <div class="timeline-item__date">Monday 10 March 2026, 14:32 GMT</div>
+                                    <div class="timeline-item__status eq-text-success">
+                                        <span>✓</span> Your sell instruction has been confirmed and queued for processing
+                                    </div>
+                                    <div class="timeline-item__details">
+                                        Instruction type: Sell all · Plan: SAYE 2023 · Shares: 1,500
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Shares Sold -->
+                            <div class="timeline-item completed">
+                                <div class="timeline-item__dot">✓</div>
+                                <div class="timeline-item__card">
+                                    <div class="timeline-item__title">Shares Sold on Market</div>
+                                    <div class="timeline-item__date">Tuesday 11 March 2026, 09:15 GMT</div>
+                                    <div class="timeline-item__status eq-text-success">
+                                        <span>✓</span> 1,500 shares sold at £3.72 per share
+                                    </div>
+                                    <div class="timeline-item__details">
+                                        Gross proceeds: £5,580.00 · Settlement date: T+2 (13 March 2026)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Contract Note (Active) -->
+                            <div class="timeline-item active">
+                                <div class="timeline-item__dot">📄</div>
+                                <div class="timeline-item__card">
+                                    <div class="timeline-item__title">Contract Note Generation</div>
+                                    <div class="timeline-item__date">Expected: Wednesday 12 March 2026</div>
+                                    <div class="timeline-item__status eq-text-teal">
+                                        <span>⏳</span> Processing — your contract note is being generated
+                                    </div>
+                                    <div class="timeline-item__details">
+                                        Your contract note will confirm the sale details, fees, and net proceeds. It will be available in your <a href="document-repository.html">Documents</a> section.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Payment Processing -->
+                            <div class="timeline-item">
+                                <div class="timeline-item__dot">💳</div>
+                                <div class="timeline-item__card">
+                                    <div class="timeline-item__title">Payment Processing</div>
+                                    <div class="timeline-item__date">Expected: Thursday 13 March 2026</div>
+                                    <div class="timeline-item__status eq-text-muted">
+                                        Pending — waiting for settlement
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 5: Money in Account -->
+                            <div class="timeline-item">
+                                <div class="timeline-item__dot">🏦</div>
+                                <div class="timeline-item__card">
+                                    <div class="timeline-item__title">Money in Your Account</div>
+                                    <div class="timeline-item__date">Expected: Friday 14 March 2026</div>
+                                    <div class="timeline-item__status eq-text-muted">
+                                        Pending — payment to Lloyds ●●●● 4821
+                                    </div>
+                                    <div class="timeline-item__details">
+                                        Estimated net payment: <strong>£5,502.00</strong> (after £25 dealing fee and £53 CGT)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notification Preferences -->
+                        <div class="eq-card eq-mt-8">
+                            <div class="eq-card__header">
+                                <div class="eq-card__title">Notification Preferences</div>
+                                <span class="eq-text-sm eq-text-muted">Get updates at every stage</span>
+                            </div>
+                            <div class="notif-options">
+                                <div class="notif-option active">
+                                    <div class="notif-option__toggle"></div>
+                                    <div>
+                                        <div class="eq-text-sm eq-text-bold">📧 Email</div>
+                                        <div class="eq-text-xs eq-text-muted">j.davies@lloyds.com</div>
+                                    </div>
+                                </div>
+                                <div class="notif-option active">
+                                    <div class="notif-option__toggle"></div>
+                                    <div>
+                                        <div class="eq-text-sm eq-text-bold">📱 Push</div>
+                                        <div class="eq-text-xs eq-text-muted">EQ Mobile App</div>
+                                    </div>
+                                </div>
+                                <div class="notif-option">
+                                    <div class="notif-option__toggle"></div>
+                                    <div>
+                                        <div class="eq-text-sm eq-text-bold">💬 SMS</div>
+                                        <div class="eq-text-xs eq-text-muted">●●●● 7291</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar: Transaction History -->
+                    <div>
+                        <div class="eq-card">
+                            <div class="eq-card__header">
+                                <div class="eq-card__title">All Transactions</div>
+                            </div>
+
+                            <div class="history-item active">
+                                <div class="history-item__icon" style="background: rgba(0,165,181,0.1);">📦</div>
+                                <div class="history-item__content">
+                                    <div class="history-item__name">Sale — 1,500 shares</div>
+                                    <div class="history-item__meta">SAYE 2023 · In progress</div>
+                                </div>
+                                <span class="eq-badge eq-badge--teal" style="font-size:10px;">Live</span>
+                            </div>
+
+                            <div class="history-item">
+                                <div class="history-item__icon" style="background: var(--eq-success-bg);">💰</div>
+                                <div class="history-item__content">
+                                    <div class="history-item__name">Dividend Payment</div>
+                                    <div class="history-item__meta">SIP · 28 Feb 2026</div>
+                                </div>
+                                <span class="eq-badge eq-badge--success" style="font-size:10px;">Done</span>
+                            </div>
+
+                            <div class="history-item">
+                                <div class="history-item__icon" style="background: var(--eq-success-bg);">🔄</div>
+                                <div class="history-item__content">
+                                    <div class="history-item__name">ISA Transfer</div>
+                                    <div class="history-item__meta">SAYE 2021 · 15 Jan 2026</div>
+                                </div>
+                                <span class="eq-badge eq-badge--success" style="font-size:10px;">Done</span>
+                            </div>
+
+                            <div class="history-item">
+                                <div class="history-item__icon" style="background: var(--eq-success-bg);">📦</div>
+                                <div class="history-item__content">
+                                    <div class="history-item__name">Sale — 500 shares</div>
+                                    <div class="history-item__meta">RSU 2023 · 3 Dec 2025</div>
+                                </div>
+                                <span class="eq-badge eq-badge--success" style="font-size:10px;">Done</span>
+                            </div>
+
+                            <div class="history-item">
+                                <div class="history-item__icon" style="background: var(--eq-success-bg);">💰</div>
+                                <div class="history-item__content">
+                                    <div class="history-item__name">Dividend Payment</div>
+                                    <div class="history-item__meta">SIP · 28 Nov 2025</div>
+                                </div>
+                                <span class="eq-badge eq-badge--success" style="font-size:10px;">Done</span>
+                            </div>
+
+                            <a href="#" class="eq-btn eq-btn--ghost eq-btn--sm eq-btn--full eq-mt-4">View all transactions →</a>
+                        </div>
+
+                        <!-- Help card -->
+                        <div class="eq-card eq-mt-4">
+                            <div class="eq-card__title" style="font-size: var(--fs-base); margin-bottom: var(--space-3);">Need help?</div>
+                            <p class="eq-text-sm eq-text-muted eq-mb-4">If your transaction seems delayed or you have questions about the process.</p>
+                            <a href="#" class="eq-btn eq-btn--secondary eq-btn--sm eq-btn--full">Contact support</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/comments.js"></script>
+</body>
+</html>
