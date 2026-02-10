@@ -451,7 +451,7 @@
                     <div class="comment-panel__header-left">
                         <div class="comment-panel__avatar">UX</div>
                         <div>
-                            <div class="comment-panel__author">Edge UX Research</div>
+                            <div class="comment-panel__author">UX Research</div>
                             <div class="comment-panel__role">Research Insight</div>
                         </div>
                     </div>
