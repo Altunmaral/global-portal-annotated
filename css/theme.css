@@ -1,13 +1,13 @@
 /* ============================================
-   EQ GLOBAL PORTAL — CSS THEMING SYSTEM
+   GLOBAL PORTAL — CSS THEMING SYSTEM
    ============================================
-   Equiniti brand-aligned design tokens and
+   Brand-aligned design tokens and
    component system for the share plan portal.
    ============================================ */
 
 /* ---- DESIGN TOKENS ---- */
 :root {
-    /* Primary Brand Colors - EQ Equiniti */
+    /* Primary Brand Colors */
     --eq-navy:        #1B2A4A;
     --eq-navy-light:  #2D4470;
     --eq-navy-dark:   #0F1A30;

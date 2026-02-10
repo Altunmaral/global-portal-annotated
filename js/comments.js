@@ -13,8 +13,8 @@
                 id: 1,
                 target: '.dashboard-welcome',
                 pos: { top: '12px', right: '180px' },
-                title: 'Single Global Identifier (EQ-ID)',
-                text: 'Employees currently deal with multiple reference numbers across systems — Easy Share, CSN, party reference — none called the same thing. This single EQ-ID unifies their identity across all plans and products.',
+                title: 'Single Global Identifier',
+                text: 'Employees currently deal with multiple reference numbers across systems — Easy Share, CSN, party reference — none called the same thing. This single global ID unifies their identity across all plans and products.',
                 evidence: [
                     { quote: 'Multiple reference numbers and none of them are called the same thing — it\'s one of my bug bears.', source: 'Anna, BT Interview' }
                 ],
@@ -26,7 +26,7 @@
                 target: '.eq-card.eq-card--elevated',
                 pos: { top: '8px', left: '200px' },
                 title: 'Unified Portfolio View',
-                text: 'The #1 most requested feature across all admin focus groups. Currently employees must log into separate systems (ESP Portal, EQ Premier, EQ Insight, CSN, EQ ISA) to see their holdings. This single dashboard eliminates that fragmentation.',
+                text: 'The #1 most requested feature across all admin focus groups. Currently employees must log into separate systems (ESP Portal, Premier, Insight, CSN, ISA) to see their holdings. This single dashboard eliminates that fragmentation.',
                 evidence: [
                     { quote: 'Just needs to all be in one space for employees to use and see a clear journey.', source: 'Admin Focus Group, 21 Jan' },
                     { quote: 'One Unified Portal — See all holdings (SIP, SAYE, discretionary, ISA, CSN) in one place.', source: 'Admin FG 16 Feb — Magic Wand wish' }
@@ -41,7 +41,7 @@
                 pos: { top: '-10px', right: '20px' },
                 flip: 'h',
                 title: 'Tax-Free vs Taxable Pie Chart',
-                text: 'Visual breakdown of tax-free vs taxable portions was specifically praised by participants who had seen it on the existing Equiniti platform. Helps employees understand their CGT exposure at a glance — especially important now that CGT allowance has reduced to £3,000.',
+                text: 'Visual breakdown of tax-free vs taxable portions was specifically praised by participants who had seen it on the existing platform. Helps employees understand their CGT exposure at a glance — especially important now that CGT allowance has reduced to £3,000.',
                 evidence: [
                     { quote: 'For normal people, I think we need to educate them a bit better about CGT implications.', source: 'Jay, Admin FG 16 Feb' }
                 ],
