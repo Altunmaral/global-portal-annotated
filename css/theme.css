@@ -156,7 +156,48 @@ input, select, textarea { font-family: inherit; font-size: inherit; }
     z-index: 100;
     display: flex;
     flex-direction: column;
-    transition: transform var(--transition-base);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.eq-sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+/* Sidebar toggle button */
+.eq-sidebar-toggle {
+    position: fixed;
+    top: 18px;
+    left: var(--sidebar-width);
+    z-index: 101;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--eq-navy);
+    color: var(--eq-white);
+    border: 2px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    padding: 0;
+    line-height: 1;
+}
+.eq-sidebar-toggle:hover {
+    background: var(--eq-teal);
+    border-color: var(--eq-teal);
+    transform: scale(1.1);
+}
+.eq-sidebar.collapsed ~ .eq-main .eq-sidebar-toggle,
+.eq-sidebar.collapsed + .eq-sidebar-toggle {
+    left: 12px;
+}
+body.sidebar-collapsed .eq-sidebar-toggle {
+    left: 12px;
+}
+body.sidebar-collapsed .eq-main {
+    margin-left: 0;
 }
 
 .eq-sidebar__logo {
