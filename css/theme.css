@@ -7,13 +7,13 @@
 
 /* ---- DESIGN TOKENS ---- */
 :root {
-    /* Primary Brand Colors */
+    /* Primary Brand Colors — NEXUS Design System */
     --eq-navy:        #1B2A4A;
     --eq-navy-light:  #2D4470;
     --eq-navy-dark:   #0F1A30;
-    --eq-teal:        #00A5B5;
-    --eq-teal-light:  #33C4D1;
-    --eq-teal-dark:   #007A87;
+    --eq-teal:        #2539E8;
+    --eq-teal-light:  #4F63ED;
+    --eq-teal-dark:   #1B2BB0;
     --eq-white:       #FFFFFF;
 
     /* Secondary / Accent */
@@ -22,26 +22,26 @@
     --eq-orange:      #F5A623;
     --eq-coral:       #E85D75;
 
-    /* Neutrals */
-    --eq-gray-50:     #F8F9FA;
-    --eq-gray-100:    #F0F2F5;
-    --eq-gray-200:    #E4E7EB;
-    --eq-gray-300:    #CED4DA;
-    --eq-gray-400:    #ADB5BD;
-    --eq-gray-500:    #6C757D;
-    --eq-gray-600:    #495057;
-    --eq-gray-700:    #343A40;
-    --eq-gray-800:    #212529;
+    /* Neutrals — NEXUS scale */
+    --eq-gray-50:     #F9FAFB;
+    --eq-gray-100:    #F3F4F6;
+    --eq-gray-200:    #E5E7EB;
+    --eq-gray-300:    #D1D5DB;
+    --eq-gray-400:    #9CA3AF;
+    --eq-gray-500:    #6B7280;
+    --eq-gray-600:    #4B5563;
+    --eq-gray-700:    #374151;
+    --eq-gray-800:    #111827;
 
-    /* Semantic Colors */
-    --eq-success:     #28A745;
-    --eq-success-bg:  #D4EDDA;
-    --eq-warning:     #FFC107;
-    --eq-warning-bg:  #FFF3CD;
-    --eq-danger:      #DC3545;
-    --eq-danger-bg:   #F8D7DA;
-    --eq-info:        #17A2B8;
-    --eq-info-bg:     #D1ECF1;
+    /* Semantic Colors — NEXUS */
+    --eq-success:     #16A34A;
+    --eq-success-bg:  #DCFCE7;
+    --eq-warning:     #F59E0B;
+    --eq-warning-bg:  #FEF3C7;
+    --eq-danger:      #DC2626;
+    --eq-danger-bg:   #FEE2E2;
+    --eq-info:        #2539E8;
+    --eq-info-bg:     #EEF0FD;
 
     /* Typography */
     --font-primary:   'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -251,7 +251,7 @@ body.sidebar-collapsed .eq-main {
     text-decoration: none;
 }
 .eq-nav-item.active {
-    background: rgba(0,165,181,0.12);
+    background: rgba(37,57,232,0.12);
     color: var(--eq-teal-light);
     border-left-color: var(--eq-teal);
 }
@@ -426,7 +426,7 @@ body.sidebar-collapsed .eq-main {
     justify-content: center;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-5);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-full);
     font-size: var(--fs-base);
     font-weight: var(--fw-semibold);
     border: 1px solid transparent;
@@ -434,9 +434,14 @@ body.sidebar-collapsed .eq-main {
     text-decoration: none;
     white-space: nowrap;
     line-height: 1;
-    height: 40px;
+    height: 36px;
 }
 .eq-btn:hover { text-decoration: none; }
+
+.eq-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37,57,232,0.3);
+}
 
 .eq-btn--primary {
     background: var(--eq-teal);
@@ -474,16 +479,26 @@ body.sidebar-collapsed .eq-main {
     border-color: transparent;
 }
 .eq-btn--ghost:hover {
-    background: rgba(0,165,181,0.08);
+    background: rgba(37,57,232,0.08);
+}
+
+.eq-btn--danger {
+    background: var(--eq-danger);
+    color: var(--eq-white);
+    border-color: var(--eq-danger);
+}
+.eq-btn--danger:hover {
+    background: #B91C1C;
+    border-color: #B91C1C;
 }
 
 .eq-btn--sm {
-    height: 32px;
+    height: 30px;
     padding: var(--space-2) var(--space-3);
     font-size: var(--fs-sm);
 }
 .eq-btn--lg {
-    height: 48px;
+    height: 44px;
     padding: var(--space-4) var(--space-8);
     font-size: var(--fs-md);
 }
@@ -507,7 +522,7 @@ body.sidebar-collapsed .eq-main {
 .eq-badge--danger  { background: var(--eq-danger-bg);  color: var(--eq-danger); }
 .eq-badge--info    { background: var(--eq-info-bg);    color: var(--eq-info); }
 .eq-badge--neutral { background: var(--eq-gray-100);   color: var(--eq-gray-600); }
-.eq-badge--teal    { background: rgba(0,165,181,0.12); color: var(--eq-teal-dark); }
+.eq-badge--teal    { background: rgba(37,57,232,0.12); color: var(--eq-teal-dark); }
 
 /* Stat / Value Display */
 .eq-stat {
@@ -650,7 +665,7 @@ body.sidebar-collapsed .eq-main {
 }
 .eq-timeline__item.active .eq-timeline__dot {
     background: var(--eq-teal);
-    box-shadow: 0 0 0 4px rgba(0,165,181,0.2);
+    box-shadow: 0 0 0 4px rgba(37,57,232,0.2);
 }
 .eq-timeline__title {
     font-weight: var(--fw-semibold);
@@ -695,7 +710,7 @@ body.sidebar-collapsed .eq-main {
 .eq-input:focus {
     outline: none;
     border-color: var(--eq-teal);
-    box-shadow: 0 0 0 3px rgba(0,165,181,0.15);
+    box-shadow: 0 0 0 3px rgba(37,57,232,0.15);
 }
 .eq-input::placeholder {
     color: var(--eq-gray-400);
